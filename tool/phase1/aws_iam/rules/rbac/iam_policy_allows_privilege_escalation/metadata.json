@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_policy_allows_privilege_escalation",
+  "CheckTitle": "Ensure IAM policies do not allow privilege escalation actions",
+  "Severity": "high",
+  "Description": "IAM customer-managed and AWS managed policies attached to principals must not contain permissions enabling documented IAM privilege escalation paths. Escalation-capable actions include iam:CreatePolicyVersion, iam:AttachRolePolicy, iam:CreateLoginProfile, iam:UpdateLoginProfile, iam:SetDefaultPolicyVersion, and iam:UpdateAssumeRolePolicy.",
+  "Risk": "Principals with privilege escalation capabilities can modify IAM policies, attach admin policies to themselves, or create new admin credentials. This allows an attacker who compromises any escalation-capable account to achieve full account control.",
+  "Remediation": "Review all attached policies for escalation-capable actions. Restrict iam:* actions to only those strictly required. Apply resource-level restrictions where possible. Use IAM Access Analyzer to identify over-permissive policies.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "NIST SP 800-53 Rev. 5 AC-6 (Least Privilege), CM-5 (Access Restrictions for Change). The specific action set is author-selected based on IAM permission evaluation semantics documented in AWS IAM documentation. High severity reflects that these actions directly enable full account control. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md; no primary source publishes a severity scale for this specific action-set pattern.",
+  "AuthoritativeSource": "NIST SP 800-53 Rev. 5; AWS IAM documentation — Security best practices in IAM",
+  "CISControl": "N/A — privilege escalation action-set detection is not a numbered control in CIS AWS 3.0.0; grounded in NIST AC-6",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, CM-5",
+  "ThreatReference": "IAM privilege escalation via permission modification actions is widely documented in AWS cloud security research literature"
+}

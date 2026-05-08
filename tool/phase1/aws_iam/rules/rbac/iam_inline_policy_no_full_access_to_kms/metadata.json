@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_inline_policy_no_full_access_to_kms",
+  "CheckTitle": "Ensure inline IAM policies do not grant full KMS management access",
+  "Severity": "medium",
+  "Description": "Inline IAM policies must not grant unrestricted KMS access (kms:*). Inline policies granting full KMS control enable key deletion scheduling, key disabling, and key policy modification. Inline policies are harder to audit than managed policies.",
+  "Risk": "Inline KMS full access is difficult to discover in policy audits and enables key destruction or exfiltration. Combined with the inline policy's embedding in the principal, this permission is immediately effective and invisible to centralized policy scans.",
+  "Remediation": "Remove kms:* from inline policies. Replace with scoped permissions (kms:Decrypt, kms:GenerateDataKey). Separate key management from key usage permissions.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "NIST SP 800-53 Rev. 5 SC-12 (Cryptographic Key Management), SC-28 (Protection of Information at Rest); inline policy form adds audit visibility risk on top of the base KMS control risk",
+  "AuthoritativeSource": "NIST SP 800-53 Rev. 5; AWS Key Management Service documentation — Security best practices for AWS KMS",
+  "CISControl": "N/A — inline KMS access is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - SC-12, SC-28"
+}

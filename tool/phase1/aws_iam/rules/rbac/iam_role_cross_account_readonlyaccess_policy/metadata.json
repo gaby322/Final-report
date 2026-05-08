@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_role_cross_account_readonlyaccess_policy",
+  "CheckTitle": "Ensure cross-account IAM roles do not grant broad ReadOnlyAccess policies",
+  "Severity": "medium",
+  "Description": "IAM roles configured for cross-account access should grant only the minimum permissions required for their purpose. Broad read-only access (ReadOnlyAccess) across all services may expose sensitive data in other AWS services (S3, Secrets Manager, SSM Parameter Store) to the trusted external account.",
+  "Risk": "Cross-account roles with broad read-only access can expose sensitive configuration data, secrets, and resource metadata to the trusted account. Even read-only access can enable reconnaissance that leads to targeted attacks against the account.",
+  "Remediation": "Restrict cross-account roles to the specific actions and resources needed by the trusted party. Add conditions such as aws:PrincipalOrgID to limit assumption to trusted organizational accounts. Avoid granting ReadOnlyAccess broadly across all services.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Role",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS IAM documentation — Security best practices in IAM (grant least privilege, including for cross-account roles); NIST SP 800-53 Rev. 5 AC-6 (Least Privilege), AC-4 (Information Flow Enforcement). Medium severity reflects read-only nature — no direct modification capability, but broad read access enables data exposure and reconnaissance. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md.",
+  "AuthoritativeSource": "AWS IAM documentation — Cross-account access; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — cross-account role scoping is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-4"
+}

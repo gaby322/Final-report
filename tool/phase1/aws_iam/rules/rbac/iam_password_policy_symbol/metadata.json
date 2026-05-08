@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_password_policy_symbol",
+  "CheckTitle": "Ensure IAM password policy requires at least one symbol",
+  "Severity": "low",
+  "Description": "The IAM account password policy should require at least one symbol character. Character class requirements are a component of the broader password complexity configuration covered by AWS Security Hub FSBP IAM.11.",
+  "Risk": "Passwords without required character classes have reduced entropy against dictionary and pattern-based attacks, though the primary driver of password strength is length (CIS 1.8) rather than character class diversity.",
+  "Remediation": "Update the IAM account password policy to require symbols via the AWS Management Console or CLI: aws iam update-account-password-policy --require-symbols.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::AccountPasswordPolicy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS Security Hub FSBP IAM.11 (broadly covers strong password policy configuration); NIST SP 800-53 Rev. 5 IA-5(1)(h) (organization-defined complexity rules). Not a standalone numbered control in CIS AWS 3.0.0; low severity reflects component-level nature of the check.",
+  "AuthoritativeSource": "AWS Security Hub FSBP IAM.11; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — character class requirements are not individually enumerated in CIS AWS 3.0.0 (see CIS 1.8 for minimum length and CIS 1.9 for reuse)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-5(1)(h)",
+  "ReferenceControlId": "IAM.11",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-11"
+}

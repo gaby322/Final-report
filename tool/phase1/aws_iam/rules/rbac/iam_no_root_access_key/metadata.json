@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_no_root_access_key",
+  "CheckTitle": "Ensure no 'root' user account access key exists",
+  "Severity": "critical",
+  "Description": "The root user account has unrestricted access to all AWS resources. Access keys for the root account must not exist; if compromised, they grant full programmatic control over the account without any MFA barrier.",
+  "Risk": "Root access keys provide unrestricted programmatic access. A compromised root access key enables full account takeover, including modification of all IAM permissions and deletion of all resources, with no additional authentication barrier.",
+  "Remediation": "Delete all access keys associated with the root user. Sign in as the root user, open IAM > Security credentials, and remove all root access keys. Use IAM roles for programmatic access instead.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Account",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS Security Hub FSBP IAM.4 (ASFF score 90.0 = CRITICAL); CIS AWS Foundations Benchmark v3.0.0 Control 1.4 (Level 1)",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.4 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-2, IA-5",
+  "ReferenceControlId": "IAM.4",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-4"
+}

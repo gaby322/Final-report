@@ -1,0 +1,52 @@
+SOURCE: AWS IAM Best Practices Documentation + AWS Well-Architected Framework (Security Pillar)
+REFERENCE: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+REFERENCE: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/identity-and-access-management.html
+NOTE: Curated synthesis of AWS IAM best practices documentation and Well-Architected Security Pillar guidance.
+
+LEAST PRIVILEGE PRINCIPLE IN AWS IAM:
+Least privilege means granting only the permissions required to perform a task, nothing more.
+AWS IAM best practices define the following patterns for achieving least privilege:
+
+PATTERN 1 — TASK-BASED ROLES:
+Create IAM roles scoped to a single workload task. Avoid reusing roles across services.
+A Lambda function that reads from DynamoDB should have only dynamodb:GetItem and
+dynamodb:Query on the specific table ARN — not dynamodb:* on *.
+
+PATTERN 2 — RESOURCE-LEVEL PERMISSIONS:
+Always specify the resource ARN rather than wildcard (*) when AWS supports resource-level
+permissions. Most IAM actions support resource-level ARN specification.
+Example: iam:PassRole restricted to arn:aws:iam::ACCOUNT:role/specific-role-name.
+Wildcard on iam:PassRole (* resource) is a common privilege escalation enabler.
+
+PATTERN 3 — CONDITION-BASED RESTRICTIONS:
+Use IAM condition keys to further restrict permission scope:
+- aws:RequestedRegion — restrict actions to specific regions
+- aws:PrincipalTag — require specific resource tags (ABAC)
+- iam:PassedToService — restrict PassRole to a specific AWS service
+- aws:SourceIp — restrict API calls to corporate IP ranges
+
+PATTERN 4 — PERMISSION BOUNDARIES:
+Permission boundaries define the maximum permissions an IAM entity can have, regardless
+of what identity-based policies allow. Use boundaries on delegated role creation to
+prevent privilege escalation via role creation.
+
+PATTERN 5 — SENSITIVE ACTION SEPARATION:
+Never combine sensitive IAM write permissions with data access in a single role:
+- iam:CreatePolicyVersion + s3:GetObject in a single role is a high-risk combination
+- Separate IAM administrative roles from workload data-access roles
+- Use separate roles for CI/CD deployment vs. runtime workload execution
+
+PATTERN 6 — ACCESS ANALYZER FOR VALIDATION:
+Before deploying any IAM policy:
+1. Run aws accessanalyzer validate-policy to check for SECURITY_WARNING or ERROR findings
+2. Use Policy Simulator to test permission boundaries
+3. Use IAM Policy Generation from CloudTrail to baseline minimum required permissions
+
+FRAMEWORK RELEVANCE:
+Phase 1 RBAC rules directly test violations of these patterns:
+- iam_policy_allows_privilege_escalation: detects dangerous action combinations
+- iam_customer_attached_policy_no_administrative_privileges: enforces Pattern 1/5
+- iam_no_custom_policy_permissive_role_assumption: enforces Pattern 2 on iam:PassRole
+- ABAC rules enforce Pattern 3 (tag-based conditions)
+Phase 3 LLM remediation steps should reference these patterns by name when generating
+grounded remediation guidance.

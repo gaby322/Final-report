@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_root_mfa_enabled",
+  "CheckTitle": "Ensure MFA is enabled for the 'root' user account",
+  "Severity": "critical",
+  "Description": "The root user account has complete access to all AWS services and resources. Multi-factor authentication (MFA) must be enabled for the root account to prevent unauthorized console access even if the root password is compromised.",
+  "Risk": "Without MFA, compromise of root credentials leads to immediate full account takeover with no residual authentication barrier. The root account can delete all IAM permissions, terminate all resources, and cannot be restricted by IAM policies.",
+  "Remediation": "Enable MFA for the root user. Sign in as root, open IAM > Security credentials, and activate a virtual or hardware MFA device.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Account",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS Security Hub FSBP IAM.9 (ASFF score 90.0 = CRITICAL); CIS AWS Foundations Benchmark v3.0.0 Control 1.5 (Level 1)",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.5 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-2(1), IA-2(2)",
+  "ReferenceControlId": "IAM.9",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-9"
+}

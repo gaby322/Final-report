@@ -1,0 +1,54 @@
+# actions: CreatePolicyVersion,SetDefaultPolicyVersion,AttachRolePolicy,AttachUserPolicy,PutRolePolicy,UpdateAssumeRolePolicy,iam:PassRole,AddRoleToInstanceProfile,AddUserToGroup,AssumeRole
+
+IAM Privilege Escalation Patterns
+Type: Curated synthesis from official MITRE ATT&CK and AWS IAM documentation
+Labeled as: researcher-curated implementation reference, not an external standard
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1098/003/
+URL: https://attack.mitre.org/techniques/T1098/001/
+URL: https://attack.mitre.org/techniques/T1550/001/
+
+Source: AWS IAM and STS official documentation
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreatePolicyVersion.html
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachRolePolicy.html
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_AttachUserPolicy.html
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_PutRolePolicy.html
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAssumeRolePolicy.html
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddRoleToInstanceProfile.html
+URL: https://docs.aws.amazon.com/IAM/latest/APIReference/API_AddUserToGroup.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
+URL: https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html
+
+Purpose:
+This file summarizes implementation-relevant IAM privilege-escalation patterns that can be justified using official MITRE ATT&CK cloud-account manipulation techniques together with AWS IAM/STS behavior. It is intended for retrieval support and analyst explanation. It is not an AWS security standard and not a MITRE-authored escalation checklist.
+
+Pattern 1: Managed policy version escalation
+A principal that can create a new version of a managed policy and make that version active can change the effective permissions granted by that policy. This is operationally relevant when the policy is attached to a privileged principal.
+
+Pattern 2: Managed policy attachment
+A principal that can attach a managed policy to a role or user can change that identity’s effective permissions by adding a new managed policy.
+
+Pattern 3: Inline policy injection
+A principal that can write or replace an inline policy on a role can change the permissions directly embedded on that role.
+
+Pattern 4: Trust policy rewrite
+A principal that can update a role’s trust policy can change who is allowed to assume the role. If the modified trust policy later permits an attacker-controlled principal to call AssumeRole, the role may become reachable.
+
+Pattern 5: Service-mediated role abuse through PassRole
+A principal that can pass a powerful role to an AWS service, together with the service-specific create or configure permission, may be able to use the service as an execution path for the role’s permissions. This is especially relevant when the role trusts the service principal and the resulting workload is attacker-controlled.
+
+Pattern 6: Instance-profile association
+A principal that can add a role to an instance profile may enable EC2-based access to that role’s credentials through the instance.
+
+Pattern 7: Group membership manipulation
+A principal that can add a user to a privileged group can indirectly grant that user the permissions attached to the group.
+
+Pattern 8: Multi-hop escalation chains
+These actions may chain. For example, a principal may first rewrite a trust policy, then assume the role, then use the new permissions to attach or modify additional policies. This is operationally important for graph-based attack-path discovery.
+
+Relationship to this framework:
+Phase 2 models several of these patterns as researcher-defined graph edge types. Phase 3 correlates CloudTrail events associated with these actions against Phase 1 findings and Phase 2 paths to distinguish latent exposure from executed escalation behavior.
+
+Framework note:
+These patterns are curated implementation abstractions derived from official MITRE and AWS documentation. They should not be presented as direct MITRE procedure enumerations or as an official AWS escalation taxonomy.

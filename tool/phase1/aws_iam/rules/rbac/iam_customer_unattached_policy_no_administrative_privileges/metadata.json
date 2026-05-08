@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_customer_unattached_policy_no_administrative_privileges",
+  "CheckTitle": "Ensure unattached customer-managed policies do not grant full administrative privileges",
+  "Severity": "medium",
+  "Description": "Customer-managed IAM policies that are currently unattached but contain full administrative privilege statements (Action: '*' and Resource: '*') should be remediated. Unattached policies represent a latent risk as they can be attached to principals at any time.",
+  "Risk": "Unattached policies with admin privileges can be attached to a principal in a single API call, instantly granting full account control. They may also be attached accidentally or by an insider threat without additional policy creation steps.",
+  "Remediation": "Review all unattached customer-managed policies for admin-level statements. Delete or restrict the policy. If the policy is needed for emergency break-glass use, scope it with permission boundaries and restrict who can attach it.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS 3.0.0 Control 1.16 (Level 1) restricts administrative privileges in attached policies. This check extends the same principle to unattached policies, which are not individually addressed in CIS 3.0.0 but represent latent escalation risk. Medium severity (rather than high) reflects that unattached policies require an explicit attachment step before exploitation — they are not immediately effective. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md.",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — unattached policy privilege scoping is not individually enumerated in CIS AWS 3.0.0; the underlying least-privilege principle is grounded in CIS 1.16 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, CM-5"
+}

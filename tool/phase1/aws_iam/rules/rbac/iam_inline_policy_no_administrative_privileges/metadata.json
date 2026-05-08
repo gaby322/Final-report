@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_inline_policy_no_administrative_privileges",
+  "CheckTitle": "Ensure inline IAM policies do not grant full administrative privileges",
+  "Severity": "high",
+  "Description": "Inline IAM policies attached to users, groups, or roles must not grant full administrative privileges (Action: '*' and Resource: '*'). Inline admin policies are particularly dangerous because they are embedded directly into the principal and not visible in the centralized policy library, making them harder to audit.",
+  "Risk": "Inline admin policies are invisible to IAM policy searches and cannot be reused — they are often created as one-off escalation paths. Because they are embedded directly in the principal, they require no attachment step and are immediately effective.",
+  "Remediation": "Remove or restrict inline policies that grant admin privileges. If administrative access is genuinely needed, use a managed policy with appropriate documentation, scope, and lifecycle controls rather than an inline policy.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.16 (Level 1); inline policies are immediately effective once created and are harder to audit than managed policies, warranting High severity",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-53 Rev. 5",
+  "CISControl": "CIS AWS 3.0.0 - 1.16 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-3"
+}

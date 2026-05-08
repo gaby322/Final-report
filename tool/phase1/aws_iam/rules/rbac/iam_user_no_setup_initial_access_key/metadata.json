@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_user_no_setup_initial_access_key",
+  "CheckTitle": "Do not setup access keys during initial user setup for IAM users that have a console password",
+  "Severity": "medium",
+  "Description": "IAM users created for console access must not simultaneously have active access keys. Access keys are for programmatic access only; combining them with console credentials at creation unnecessarily increases the credential attack surface. Users who need programmatic access should request it separately after justifying the need.",
+  "Risk": "Users with both console and programmatic credentials have a larger credential attack surface. If either credential type is compromised, the attacker gains dual-mode access. This pattern often indicates users created with over-provisioned credentials from the start.",
+  "Remediation": "Remove active access keys from IAM users who have console access and do not require programmatic access. For users who genuinely need both, document the business justification and enforce key rotation per CIS 1.14.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.11 (Level 1); AWS Security Hub FSBP IAM.2",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.11 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-5, AC-6",
+  "ReferenceControlId": "IAM.2",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-2"
+}

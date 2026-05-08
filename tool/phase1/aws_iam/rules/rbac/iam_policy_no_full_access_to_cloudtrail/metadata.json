@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_policy_no_full_access_to_cloudtrail",
+  "CheckTitle": "Ensure IAM policies do not grant full CloudTrail management access",
+  "Severity": "medium",
+  "Description": "IAM policies (customer-managed and inline) must not grant unrestricted CloudTrail access (cloudtrail:*). Full CloudTrail access enables deletion of trails, stopping of logging, and modification of log configuration — actions that directly undermine audit integrity.",
+  "Risk": "Full CloudTrail access allows an attacker to delete trails, stop logging, or modify the log destination — eliminating the audit record of their actions. Audit trail destruction is a documented post-compromise technique used to cover attacker activity.",
+  "Remediation": "Replace cloudtrail:* permissions with only the specific read actions required (e.g., cloudtrail:GetTrailStatus, cloudtrail:LookupEvents). Protect CloudTrail modification permissions using SCPs that restrict cloudtrail:DeleteTrail and cloudtrail:StopLogging.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "NIST SP 800-53 Rev. 5 AU-9 (Protection of Audit Information), AU-2 (Event Logging). Full CloudTrail control enables direct audit evasion. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md.",
+  "AuthoritativeSource": "NIST SP 800-53 Rev. 5; AWS CloudTrail documentation — Best practices for CloudTrail",
+  "CISControl": "N/A — CloudTrail permission scoping is not individually enumerated in CIS AWS 3.0.0 IAM controls",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AU-9, AU-2",
+  "ThreatReference": "MITRE ATT&CK for Cloud T1562.008 (Disable or Modify Cloud Logs)"
+}

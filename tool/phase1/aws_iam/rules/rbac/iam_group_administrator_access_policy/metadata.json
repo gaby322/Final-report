@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_group_administrator_access_policy",
+  "CheckTitle": "Ensure IAM groups do not have full administrative privileges",
+  "Severity": "high",
+  "Description": "IAM groups must not have policies granting full administrative privileges. Group-level admin policies grant unrestricted access to all current and future members of the group, amplifying the impact of any individual member account compromise.",
+  "Risk": "Admin group membership grants admin access to all group members simultaneously. If any member's credentials are compromised, or if an unauthorized user is added to the group, full account control is immediately granted. Group policies also apply to all future members added to the group.",
+  "Remediation": "Remove admin policies from groups. Grant administrative access only through time-limited role assumption with MFA requirements. If a group requires elevated access, scope the policy to the minimum required actions.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Group",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.16 (Level 1); group-level admin policy multiplies the risk across all group members",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-53 Rev. 5",
+  "CISControl": "CIS AWS 3.0.0 - 1.16 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-2"
+}

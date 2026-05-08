@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_avoid_root_usage",
+  "CheckTitle": "Eliminate use of the 'root' user for administrative and daily tasks",
+  "Severity": "high",
+  "Description": "The root account must not be used for routine operations. Detected recent root account activity indicates that administrative work is being performed with the highest-privilege identity, violating the principle of least privilege.",
+  "Risk": "Using the root account for day-to-day operations unnecessarily exposes the most privileged credential. Any compromise during an active root session risks unrestricted account modification. Root usage bypasses all IAM permission boundaries and SCPs.",
+  "Remediation": "Create IAM users or roles with scoped permissions for all administrative tasks. Use root only for specific tasks requiring it (e.g., account closure, billing, enabling AWS Organizations). Enable CloudTrail alerting on root sign-in events.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.7 (Level 1); AWS Security Hub FSBP IAM.7; direct root usage enables unrestricted access bypassing all access controls",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.7 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-2, AC-6, IA-2",
+  "ReferenceControlId": "IAM.7",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-7"
+}

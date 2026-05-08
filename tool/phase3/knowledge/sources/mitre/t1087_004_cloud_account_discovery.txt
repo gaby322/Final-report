@@ -1,0 +1,28 @@
+# actions: GenerateCredentialReport,GetCredentialReport
+
+Technique: T1087.004 — Account Discovery: Cloud Account
+Tactic: Discovery
+Platforms: IaaS, SaaS
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1087/004/
+
+Description:
+Adversaries may attempt to enumerate cloud accounts to understand the identity structure of a target environment. MITRE notes that cloud APIs may be used to retrieve information about accounts, users, roles, and credentials in order to identify valuable targets and understand account posture.
+
+AWS examples cited by MITRE on the T1087.004 technique page:
+- aws iam list-users
+- aws iam list-roles
+
+Framework-curated AWS interpretation (NOT cited on the MITRE page):
+- GenerateCredentialReport, GetCredentialReport are framework-selected
+  credential-enumeration actions treated by this project as signals under
+  T1087.004 because they return principal and credential inventory. These
+  actions are NOT listed as MITRE-cited examples on the T1087.004 page; any
+  paper reference must present them as framework-curated, not MITRE-supported.
+
+Detection:
+Cloud account discovery may be visible through IAM and identity enumeration activity, especially when credential reporting or identity inventory actions are performed by principals that do not normally require them.
+
+Mitigation:
+Defensive value comes from restricting unnecessary identity enumeration permissions and monitoring unusual use of account inventory or credential-reporting capabilities.

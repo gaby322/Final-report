@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_no_custom_policy_permissive_role_assumption",
+  "CheckTitle": "Ensure IAM role trust policies do not allow overly permissive principal assumptions",
+  "Severity": "high",
+  "Description": "IAM role trust policies must not use wildcard principals ('*') in the Principal element that allow any entity (unauthenticated or authenticated) to assume the role. Trust policies must specify explicit principals (AWS accounts, IAM principals, or specific services).",
+  "Risk": "A trust policy with Principal: '*' allows any AWS principal in any account to attempt to assume the role. Combined with lax conditions, this can enable cross-account unauthorized role assumption, a well-documented AWS privilege escalation vector.",
+  "Remediation": "Restrict role trust policies to explicit, named principals. Add aws:PrincipalOrgID or aws:PrincipalAccount conditions to limit assumption to your organization's accounts. Use sts:ExternalId for third-party cross-account roles.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Role",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS IAM documentation — Security best practices in IAM (restrict trust policy principals to explicit entities); NIST SP 800-53 Rev. 5 AC-3 (Access Enforcement), SC-11 (Trusted Path). High severity reflects that wildcard trust enables direct unauthorized role assumption from any AWS principal.",
+  "AuthoritativeSource": "AWS IAM documentation — Roles and trust policies; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — permissive trust policy detection is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-3, SC-11"
+}

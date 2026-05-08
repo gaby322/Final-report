@@ -1,0 +1,156 @@
+Hybrid Framework — Required AWS IAM Permissions
+================================================
+
+The tool operates in read-only mode. It requires only the permissions listed
+below. Do NOT grant AdministratorAccess or wildcard resource permissions.
+
+Attach the following policy to the IAM user or role used to run this tool.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 1 — IAM Collector (required)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+iam:ListUsers
+iam:ListRoles
+iam:ListGroups
+iam:ListPolicies
+iam:GetPolicy
+iam:GetPolicyVersion
+
+iam:ListAttachedUserPolicies
+iam:ListAttachedRolePolicies
+iam:ListAttachedGroupPolicies
+iam:ListUserPolicies
+iam:GetUserPolicy
+iam:ListRolePolicies
+iam:GetRolePolicy
+iam:ListGroupPolicies
+iam:GetGroupPolicy
+
+iam:ListGroupsForUser
+iam:GetGroup
+iam:ListMFADevices
+iam:ListVirtualMFADevices
+
+iam:ListAccessKeys
+iam:GetAccessKeyLastUsed
+iam:ListUserTags
+iam:ListRoleTags
+iam:ListGroupTags
+
+iam:GetAccountSummary
+iam:GetAccountPasswordPolicy
+iam:GenerateCredentialReport
+iam:GetCredentialReport
+
+iam:ListSAMLProviders
+iam:GetSAMLProvider
+iam:ListServerCertificates
+iam:ListServiceSpecificCredentials
+
+sts:GetCallerIdentity
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 1 — EC2 Collector (required for PassRole path detection)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ec2:DescribeInstances
+ec2:DescribeVolumes
+ec2:DescribeSnapshots
+ec2:DescribeImages
+ec2:DescribeVpcs
+ec2:DescribeSubnets
+ec2:DescribeSecurityGroups
+ec2:DescribeNetworkInterfaces
+ec2:DescribeVpcEndpoints
+
+Note: If any EC2 permission is missing, the tool prints which permission is
+needed and skips that resource type. Phase 2 PassRole-via-EC2 paths will
+only be discovered if ec2:DescribeInstances is granted.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 1 — Organizations (optional)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+organizations:ListAccounts
+organizations:ListOrganizationFeatures (or organizations:ListDelegatedAdministrators)
+
+Note: These are optional. If not granted, organization metadata will be empty
+and org-level checks will be skipped — all other checks continue normally.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 2 — Graph Analysis (no AWS API calls)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No additional permissions required.
+Phase 2 operates entirely on the inventory collected by Phase 1.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 3 — CloudTrail Collector (required for live collection)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cloudtrail:LookupEvents
+
+Note: Only management events are collected. Data events (S3, Lambda)
+require additional CloudTrail trail configuration and are out of scope.
+If you provide a pre-existing CloudTrail JSON file via --cloudtrail,
+this permission is not needed.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MINIMUM IAM POLICY (JSON)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "HybridFrameworkIAMReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "iam:List*",
+        "iam:Get*",
+        "iam:GenerateCredentialReport"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "HybridFrameworkEC2ReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Describe*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "HybridFrameworkCloudTrailReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "cloudtrail:LookupEvents"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "HybridFrameworkSTSIdentity",
+      "Effect": "Allow",
+      "Action": [
+        "sts:GetCallerIdentity"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "HybridFrameworkOrganizationsReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "organizations:ListAccounts",
+        "organizations:ListOrganizationFeatures"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

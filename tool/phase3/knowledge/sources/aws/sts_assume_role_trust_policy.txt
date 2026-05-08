@@ -1,0 +1,41 @@
+# actions: AssumeRole,AssumeRoleWithSAML,AssumeRoleWithWebIdentity,UpdateAssumeRolePolicy
+
+AWS STS AssumeRole and Trust Policy Evaluation
+Source: AWS IAM and AWS STS official documentation
+URL: https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_principal.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_iam-condition-keys.html
+
+AssumeRole overview:
+sts:AssumeRole is an AWS STS API operation that returns temporary security credentials for an IAM role. To assume a role, the caller must be trusted by the role’s trust policy, and in many scenarios the caller also needs an identity-based policy that allows sts:AssumeRole on the target role.
+
+Trust policy structure:
+A trust policy is a required resource-based policy attached to an IAM role. It specifies which principals are trusted to assume the role. AWS documents that principals in a role trust policy can include AWS accounts, IAM users, IAM roles, federated principals, and AWS services.
+
+Useful trust-policy conditions:
+Commonly used condition keys in trust policies include:
+- aws:MultiFactorAuthPresent
+- aws:PrincipalOrgID
+- sts:ExternalId
+Additional IAM and STS condition keys can be used depending on the trust model.
+
+Broad trust risks:
+A trust policy can become overly broad if it trusts an entire external account or uses a very broad principal scope without restrictive conditions. AWS also documents that wildcard use in the Principal element has important limitations and risks, and recommends narrowing access with conditions where broader trust is unavoidable.
+
+Cross-account trust:
+For cross-account role assumption, the trusting account uses the role’s trust policy to specify the trusted account or principal, and the trusted side must also grant the caller permission to call sts:AssumeRole. Both sides matter.
+
+Role chaining:
+A role session can assume another role if the session has permission to do so and the target role’s trust policy allows it. This is operationally relevant to multi-hop access paths.
+
+UpdateAssumeRolePolicy:
+iam:UpdateAssumeRolePolicy replaces the trust policy attached to a role. In security analysis, this is a high-impact action because a principal that can modify trust policy can potentially expand who is allowed to assume the role.
+
+Relationship to this framework:
+This framework uses trust-policy and AssumeRole logic in:
+- Phase 2, to determine whether an AssumeRole edge is reachable
+- Phase 3, to interpret CloudTrail role-assumption events and trust-policy modification events
+
+Framework note:
+This file is retrieval-oriented explanatory material based on AWS documentation. It should not be treated as a formal proof model of all IAM edge cases; the AWS documentation pages remain the primary authority.

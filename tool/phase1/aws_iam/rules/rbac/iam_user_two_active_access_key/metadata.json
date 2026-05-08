@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_user_two_active_access_key",
+  "CheckTitle": "Ensure there is only one active access key available for any single IAM user",
+  "Severity": "medium",
+  "Description": "IAM users must not have more than one active access key simultaneously. Having two active access keys increases the attack surface and complicates key rotation practices, as it is difficult to determine which key is in use by which application.",
+  "Risk": "Multiple active access keys per user double the number of credentials that must be monitored and can be compromised. Key rotation becomes ambiguous when two keys are active, leading to indefinite persistence of both keys.",
+  "Remediation": "Deactivate or delete the older access key for any user who has two active keys. Retain only the key currently in use, and ensure keys are rotated per CIS 1.14 (every 90 days).",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.13 (Level 1); AWS Security Hub FSBP IAM.22",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.13 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-5",
+  "ReferenceControlId": "IAM.22",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-22"
+}

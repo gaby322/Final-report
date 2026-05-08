@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_resource_creation_without_request_tag_enforcement",
+  "CheckTitle": "Ensure IAM resource creation actions require tags via aws:RequestTag conditions",
+  "Severity": "medium",
+  "Description": "Policies granting IAM resource creation actions (iam:CreateUser, iam:CreateRole, iam:CreatePolicy, iam:CreateGroup) on Resource: * without aws:RequestTag/* conditions permit creation of untagged IAM resources. In ABAC environments, resources created without classification tags cannot be governed by tag-based access controls from their inception, creating governance gaps.",
+  "Risk": "IAM resources created without required classification tags: (1) Cannot be managed by tag-based Service Control Policies or permission boundaries, (2) May receive implicit access grants from wildcard tag conditions, (3) Fall outside the attribute-based inventory and access control model. Over time, untagged resources accumulate and create ungovernable access control gaps.",
+  "Remediation": "Add aws:RequestTag/* conditions to all policies granting IAM resource creation actions. Define a mandatory set of classification tags (e.g., Environment, Project, Owner) that must be provided at creation time. Combine with aws:TagKeys to restrict which tag keys are permitted.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance", "abac"],
+  "SeverityBasis": "AWS IAM documentation — Controlling access during AWS requests using aws:RequestTag; NIST SP 800-162 §2.4.2 (Attribute Management in Enterprise ABAC) and §3.2.2.10 (Attribute Management); NIST SP 800-53 Rev. 5 CM-8. Medium severity reflects governance gap rather than direct exploitation path.",
+  "AuthoritativeSource": "AWS IAM documentation — Controlling access during AWS requests; NIST SP 800-162; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — aws:RequestTag enforcement is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - CM-8",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html"
+}

@@ -1,0 +1,30 @@
+# actions: iam:PassRole,AddRoleToInstanceProfile
+
+AWS IAM PassRole — Service Role Delegation
+Source: AWS IAM User Guide — Grant a user permissions to pass a role to an AWS service
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
+
+Overview:
+iam:PassRole is an IAM permission that controls whether a principal can pass an IAM role to an AWS service. It is not a standalone service API call; instead, AWS checks this permission when a request includes a role parameter for a service resource.
+
+Key constraints:
+- A role can be passed only to a service in the same AWS account
+- The role’s trust policy must allow the target service principal
+- The iam:PassedToService condition key can be used to restrict which service may receive the role
+
+Operational security relevance:
+A principal with iam:PassRole on a powerful role, combined with permission to create or configure a service resource that accepts that role, may indirectly obtain the effective privileges of that role through the service.
+
+Examples:
+- EC2 launch paths where a role is associated with an instance profile
+- Lambda creation or update paths where a function is configured to run with a role
+- Other service-role delegation paths where the service later acts using the role’s permissions
+
+AddRoleToInstanceProfile:
+iam:AddRoleToInstanceProfile is operationally relevant because it can associate a role with an EC2 instance profile, enabling the instance to use that role’s credentials.
+
+Relationship to this framework:
+Phase 2 models PassRole-based privilege escalation as researcher-defined edge patterns such as service-mediated privilege transitions. These edges depend on both role-passing capability and the service role trust relationship.
+
+Framework note:
+This file is retrieval-oriented AWS documentation summary. Service-specific exploitation chains are framework-level analysis logic, not direct AWS claims of privilege escalation.

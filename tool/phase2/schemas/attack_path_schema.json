@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phase 2 Attack Paths Output",
+  "description": "Schema for phase2_attack_paths.json produced by the Phase 2 runner.",
+  "type": "object",
+  "required": ["account_id", "graph_stats", "path_stats", "admin_nodes", "attack_paths"],
+  "properties": {
+    "account_id": {"type": "string", "pattern": "^[0-9]{12}$"},
+    "graph_stats": {
+      "type": "object",
+      "required": ["total_nodes", "admin_nodes", "total_edges", "user_nodes", "role_nodes"],
+      "properties": {
+        "total_nodes": {"type": "integer", "minimum": 0},
+        "admin_nodes": {"type": "integer", "minimum": 0},
+        "total_edges": {"type": "integer", "minimum": 0},
+        "total_state_transition_edges": {"type": "integer", "minimum": 0},
+        "user_nodes": {"type": "integer", "minimum": 0},
+        "role_nodes": {"type": "integer", "minimum": 0},
+        "group_nodes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "path_stats": {
+      "type": "object",
+      "properties": {
+        "total_paths": {"type": "integer", "minimum": 0},
+        "critical_paths": {"type": "integer", "minimum": 0},
+        "high_paths": {"type": "integer", "minimum": 0},
+        "unique_risky_principals": {"type": "integer", "minimum": 0},
+        "unique_admin_destinations": {"type": "integer", "minimum": 0},
+        "single_hop_paths": {"type": "integer", "minimum": 0},
+        "multi_hop_paths": {"type": "integer", "minimum": 0}
+      }
+    },
+    "admin_nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["arn", "name", "type", "has_star_star", "can_self_escalate"],
+        "properties": {
+          "arn": {"type": "string"},
+          "name": {"type": "string"},
+          "type": {"type": "string", "enum": ["iam_user", "iam_role"]},
+          "has_star_star": {"type": "boolean"},
+          "can_self_escalate": {"type": "boolean"}
+        }
+      }
+    },
+    "attack_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path_id", "risk_level", "hop_count",
+          "start_principal", "end_principal", "steps", "summary"
+        ],
+        "properties": {
+          "path_id": {"type": "string", "minLength": 1},
+          "risk_level": {"type": "string", "enum": ["CRITICAL", "HIGH"]},
+          "hop_count": {"type": "integer", "minimum": 1},
+          "start_principal": {
+            "type": "object",
+            "required": ["arn", "name"],
+            "properties": {
+              "arn": {"type": "string"},
+              "name": {"type": "string"}
+            }
+          },
+          "end_principal": {
+            "type": "object",
+            "required": ["arn", "name"],
+            "properties": {
+              "arn": {"type": "string"},
+              "name": {"type": "string"}
+            }
+          },
+          "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "source_arn", "target_arn", "edge_type",
+                "reason", "conditions", "is_abac_conditioned", "confidence"
+              ],
+              "properties": {
+                "source_arn": {"type": "string"},
+                "target_arn": {"type": "string"},
+                "target_name": {"type": "string"},
+                "edge_type": {
+                  "type": "string",
+                  "enum": [
+                    "sts:AssumeRole",
+                    "iam:CreatePolicyVersion",
+                    "iam:AttachRolePolicy",
+                    "iam:PutRolePolicy",
+                    "iam:UpdateAssumeRolePolicy",
+                    "iam:AttachUserPolicy",
+                    "iam:PutUserPolicy",
+                    "iam:CreateAccessKey",
+                    "iam:PassRole_via_EC2",
+                    "iam:PassRole_via_Lambda",
+                    "abac:tag_conditioned_assume",
+                    "iam:MemberOf",
+                    "iam:AttachGroupPolicy",
+                    "iam:PutGroupPolicy",
+                    "iam:AddUserToGroup",
+                    "iam:PassRole_via_Glue",
+                    "iam:PassRole_via_CloudFormation",
+                    "iam:PassRole_via_SageMaker",
+                    "iam:PassRole_via_DataPipeline",
+                    "iam:SetDefaultPolicyVersion",
+                    "iam:CreateLoginProfile",
+                    "iam:UpdateLoginProfile",
+                    "iam:PassRole_via_AppRunner",
+                    "iam:PassRole_via_BedrockAgentCore",
+                    "iam:PassRole_via_CodeBuild",
+                    "iam:PassRole_via_ECS",
+                    "iam:PassRole_via_Glue_Job",
+                    "iam:PassRole_via_Lambda_Variant",
+                    "iam:PassRole_via_SageMaker_Job",
+                    "iam:PassRole_via_CloudFormation_StackSets",
+                    "iam:PassRole_via_EC2_Spot"
+                  ]
+                },
+                "reason": {"type": "string", "minLength": 1},
+                "conditions": {"type": "object"},
+                "is_abac_conditioned": {"type": "boolean"},
+                "confidence": {"type": "string", "enum": ["HIGH", "MEDIUM", "LOW"]}
+              }
+            }
+          },
+          "summary": {"type": "string"}
+        }
+      }
+    }
+  }
+}

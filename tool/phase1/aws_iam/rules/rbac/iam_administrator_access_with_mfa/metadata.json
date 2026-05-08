@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_administrator_access_with_mfa",
+  "CheckTitle": "Ensure users with administrative access through group membership have MFA enabled",
+  "Severity": "high",
+  "Description": "IAM users who are members of groups granting administrative access must have MFA enabled. This is a composite check derived from CIS 1.10 (MFA for console users) applied specifically to the subset of users identified by CIS 1.16 criteria (administrative access). It is not itself a numbered CIS control. Administrative access without MFA represents the combination of maximum privilege with a single-factor authentication barrier.",
+  "Risk": "An administrative user without MFA requires only a compromised password for full account control. This is the highest-risk credential configuration for non-root principals — maximum privilege with minimum authentication assurance.",
+  "Remediation": "Enable MFA for all users in groups with administrative policies (CIS 1.10). Enforce MFA via IAM policy condition aws:MultiFactorAuthPresent on the group or role trust policy.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Group",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "Composite of CIS AWS 3.0.0 Control 1.10 (MFA for console users, Level 1) and Control 1.16 (no admin privileges, Level 1). This check is not independently enumerated in CIS; it applies CIS 1.10 to the high-risk subset defined by CIS 1.16 criteria. High severity reflects that the combination of maximum privilege and absent MFA is the highest-risk non-root credential state.",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-53 Rev. 5",
+  "CISControl": "CIS AWS 3.0.0 - 1.10 (Level 1) applied to principals meeting 1.16 (Level 1) criteria; composite check, not an individually numbered CIS control",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-2(1), AC-6"
+}

@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_user_console_access_unused",
+  "CheckTitle": "Ensure credentials unused for 45 days or greater are disabled (console passwords)",
+  "Severity": "medium",
+  "Description": "IAM user console passwords (login credentials) that have not been used for 45 days must be disabled. Unused console access represents an attack surface that may indicate orphaned accounts or former-employee accounts that should be deprovisioned.",
+  "Risk": "Unused console credentials may belong to departed employees or abandoned accounts. If exfiltrated, they enable long-term persistent access. Accounts that are never logged into cannot be monitored for suspicious activity.",
+  "Remediation": "Disable console access for users who have not logged in within 45 days. Remove login profiles via the IAM console (Actions > Manage console access) or CLI: aws iam delete-login-profile --user-name <username>.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.12 (Level 1) — explicitly specifies 45-day threshold; AWS Security Hub FSBP IAM.8 (ASFF score 64 / MEDIUM)",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.12 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-4, IA-5",
+  "ReferenceControlId": "IAM.8",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-8"
+}

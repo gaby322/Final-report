@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_inline_policy_no_full_access_to_cloudtrail",
+  "CheckTitle": "Ensure inline IAM policies do not grant full CloudTrail management access",
+  "Severity": "medium",
+  "Description": "Inline IAM policies must not grant unrestricted CloudTrail access (cloudtrail:*). Inline policies granting full CloudTrail control enable deletion of audit trails and stopping of log collection, directly undermining audit integrity. Inline policies are harder to audit than managed policies.",
+  "Risk": "Inline policies with full CloudTrail access can be used to eliminate the audit trail of an attack. Inline policy assignments are not visible in centralized policy searches, making this permission assignment pattern harder to detect during security reviews.",
+  "Remediation": "Remove cloudtrail:* from inline policies. Replace with only the specific read actions required. Protect CloudTrail modification permissions using SCPs.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "NIST SP 800-53 Rev. 5 AU-9 (Protection of Audit Information), AU-2 (Event Logging); inline policy form adds audit visibility risk on top of the base CloudTrail control risk. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md.",
+  "AuthoritativeSource": "NIST SP 800-53 Rev. 5; AWS CloudTrail documentation — Best practices for CloudTrail",
+  "CISControl": "N/A — inline CloudTrail access is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AU-9, AU-2",
+  "ThreatReference": "MITRE ATT&CK for Cloud T1562.008 (Disable or Modify Cloud Logs)"
+}

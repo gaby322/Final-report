@@ -1,0 +1,18 @@
+# actions: DeleteUser,DeleteRole,DeleteAccessKey
+
+Technique: T1070 — Indicator Removal
+Tactic: Defense Evasion
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1070/
+
+Description:
+Adversaries may delete or modify artifacts generated within systems to remove evidence of their presence or hinder defenses. MITRE describes this technique broadly as removing indicators that would otherwise support detection, forensic analysis, or incident response.
+
+AWS-relevant interpretation for this framework:
+- DeleteUser may remove an attacker-created IAM user used for persistence
+- DeleteRole may remove a role created or altered during escalation activity
+- DeleteAccessKey may remove credentials created during adversary activity
+
+Framework note:
+These AWS IAM actions are framework-relevant interpretations for cloud identity investigations. They should not be presented as direct MITRE AWS procedure examples from the T1070 page.

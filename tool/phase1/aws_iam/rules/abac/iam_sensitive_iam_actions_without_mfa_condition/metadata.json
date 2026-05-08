@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_sensitive_iam_actions_without_mfa_condition",
+  "CheckTitle": "Ensure sensitive IAM actions require MFA re-authentication via aws:MultiFactorAuthPresent",
+  "Severity": "high",
+  "Description": "Policies granting sensitive IAM actions on Resource: * without aws:MultiFactorAuthPresent conditions allow destructive operations to be performed by long-lived credentials without step-up authentication. The aws:MultiFactorAuthPresent condition key is an environment-condition attribute per NIST SP 800-162 §2.2 (working definition of ABAC) and §3.1.3.5 (Environment Condition), reflecting whether the calling session included MFA. The monitored action set (credential deletion, principal deletion, permission revocation, access key creation) is author-selected based on the destructive or irreversible nature of the operations as documented in the AWS IAM action reference.",
+  "Risk": "Without MFA conditions on sensitive IAM actions: (1) Stolen IAM credentials can be used to delete admin users, detach security policies, create access keys for other users, or deactivate MFA devices — all without requiring physical possession of the MFA device. (2) Session token theft allows the thief to perform irreversible credential and permission operations. MFA re-authentication (step-up) ensures physical possession of the second factor at the time of the sensitive operation.",
+  "Remediation": "Add Condition: {Bool: {aws:MultiFactorAuthPresent: true}} to all policy statements granting sensitive IAM actions. Ensure that the policies granting these actions deny them when aws:MultiFactorAuthPresent is false. Note: This condition only applies to console and direct API sessions — role assumption sessions always have MultiFactorAuthPresent=false unless the AssumeRole call itself required MFA.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance", "abac"],
+  "SeverityBasis": "AWS IAM documentation — Configuring MFA-protected API access; NIST SP 800-53 Rev. 5 IA-2(1) (MFA for privileged operations). aws:MultiFactorAuthPresent is the standard AWS ABAC mechanism for step-up authentication. High severity reflects that missing MFA condition enables credential theft to translate directly to irreversible account damage.",
+  "AuthoritativeSource": "AWS IAM documentation — Configuring MFA-protected API access; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — per-action MFA enforcement is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-2(1)",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_configure-api-require.html"
+}

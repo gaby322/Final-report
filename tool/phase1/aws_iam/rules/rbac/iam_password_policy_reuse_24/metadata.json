@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_password_policy_reuse_24",
+  "CheckTitle": "Ensure IAM password policy prevents password reuse of the last 24 passwords",
+  "Severity": "medium",
+  "Description": "The IAM account password policy must prevent reuse of the last 24 passwords. Password reuse prevention stops users from cycling back to previously compromised passwords after forced resets.",
+  "Risk": "Without reuse prevention, users may cycle through a small set of passwords, making previously leaked credentials effective again. If an old password was exfiltrated, reuse allows attackers to regain access after a password change.",
+  "Remediation": "Update the IAM account password policy to prevent reuse of the last 24 passwords via the AWS Management Console or CLI: aws iam update-account-password-policy --password-reuse-prevention 24.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::AccountPasswordPolicy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.9 (Level 1); NIST SP 800-53 Rev. 5 IA-5(1) — prohibiting known-compromised password reuse",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-53 Rev. 5",
+  "CISControl": "CIS AWS 3.0.0 - 1.9 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-5(1)"
+}

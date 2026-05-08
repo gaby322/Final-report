@@ -1,0 +1,17 @@
+{
+  "CheckID": "iam_identity_policy_overly_permissive_without_tag_conditions",
+  "CheckTitle": "Ensure overly permissive identity policies include condition-based access boundaries in ABAC environments",
+  "Severity": "medium",
+  "Description": "IAM identity policy statements that allow broad permissions (Action: '*' or Action: 'service:*') on all resources (Resource: '*') without any condition block bypass intended ABAC access segmentation. In environments using attribute-based access control, unconstrained wildcard policies are not limited by tag-based conditions.",
+  "Risk": "Broad allow statements on all resources without conditions violate least-privilege principles and bypass the access segmentation model. In ABAC-oriented environments, these statements leave access unrestricted by any principal tag, resource tag, request tag, or other contextual attribute, negating the ABAC design intent.",
+  "Remediation": "Narrow Action and Resource scope to the minimum required. Where ABAC is intended, add tag-based conditions (aws:PrincipalTag, aws:ResourceTag, aws:RequestTag, or aws:TagKeys). Review all wildcard policies for unnecessary breadth.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance", "abac", "least-privilege"],
+  "SeverityBasis": "AWS IAM ABAC documentation (attribute-based access control design); NIST SP 800-53 Rev. 5 AC-6 (Least Privilege), AC-3 (Access Enforcement); medium severity reflects that exploitation requires an attacker to first compromise the overly-permissive principal",
+  "AuthoritativeSource": "AWS IAM ABAC documentation; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — ABAC condition enforcement is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-3",
+  "ReferenceSource": "AWS IAM ABAC Documentation",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html"
+}

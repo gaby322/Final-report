@@ -1,0 +1,43 @@
+SOURCE: MITRE ATT&CK® for Enterprise (Cloud) — Technique T1530
+TECHNIQUE: Data from Cloud Storage
+TACTIC: Collection
+ATT&CK ID: T1530
+URL: https://attack.mitre.org/techniques/T1530/
+NOTE: Curated synthesis of MITRE ATT&CK wiki content and AWS S3/IAM documentation.
+
+DESCRIPTION:
+Adversaries may access data objects from improperly secured cloud storage. In AWS
+contexts, one common manifestation is unauthorized S3 bucket access following IAM
+privilege escalation. An adversary with acquired IAM credentials or roles may
+enumerate and exfiltrate objects from S3 buckets containing sensitive data
+(credentials, backups, source code, PII). The framing above is a framework-level
+interpretation of T1530 applied to AWS; MITRE's technique page is tactic-scoped
+(Collection) and does not single out S3 as a primary manifestation.
+
+RELEVANT AWS API ACTIONS (IAM-linked):
+- s3:GetObject — retrieve individual objects from S3 buckets
+- s3:ListBucket — enumerate object keys (prerequisite for bulk collection)
+- s3:GetBucketPolicy — read bucket policy to understand access controls
+- s3:CopyObject — duplicate objects to attacker-controlled buckets
+- sts:AssumeRole — assume a role with S3 read access after IAM escalation
+
+IAM-SPECIFIC RELEVANCE:
+This technique typically follows IAM privilege escalation (T1098 or T1078.004). An
+adversary who escalates to a role with S3 data access can immediately begin collection.
+Relevant IAM misconfigurations that enable this technique:
+- Roles with s3:GetObject on * attached (overly permissive S3 data policies)
+- Cross-account role trust policies without ExternalId condition (enables collection by third parties)
+- Instance profiles with data access attached to publicly accessible EC2 instances
+
+DETECTION IN THIS FRAMEWORK:
+Phase 3 correlates S3 API calls against principals that appear in Phase 2 escalation
+paths. A principal with a known privilege escalation path who subsequently calls
+s3:GetObject or s3:ListBucket represents a potential post-escalation collection event.
+CloudTrail event source s3.amazonaws.com is normalized by the CloudTrail normalizer.
+
+REMEDIATION POINTERS:
+- Apply S3 bucket policies restricting access to specific roles/VPC endpoints
+- Enable S3 server access logging and S3 object-level CloudTrail logging
+- Use AWS Macie to classify and alert on sensitive S3 data access
+- Enforce s3:GetObject deny in SCPs for non-data-access roles
+- Apply aws:PrincipalTag conditions to limit S3 access by environment tag

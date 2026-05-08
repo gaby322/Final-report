@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_policy_no_full_access_to_kms",
+  "CheckTitle": "Ensure IAM policies do not grant full KMS management access",
+  "Severity": "medium",
+  "Description": "IAM policies must not grant unrestricted KMS access (kms:*). Full KMS access enables key scheduling for deletion, disabling of keys, and modification of key policies — actions that can render encrypted data permanently inaccessible or redirect decryption to attacker-controlled principals.",
+  "Risk": "Full KMS access allows an attacker to schedule master keys for deletion (destroying encrypted data), modify key policies to grant themselves decryption access, or disable keys to cause service disruptions. KMS key material access is a high-value target in ransomware and data exfiltration attacks.",
+  "Remediation": "Replace kms:* permissions with only the minimum required actions (e.g., kms:Decrypt, kms:GenerateDataKey). Separate key management permissions from key usage permissions. Restrict kms:ScheduleKeyDeletion and kms:PutKeyPolicy to a small set of authorized key administrators.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "NIST SP 800-53 Rev. 5 SC-12 (Cryptographic Key Establishment and Management), SC-28 (Protection of Information at Rest); full KMS control enables data destruction and decryption key exfiltration",
+  "AuthoritativeSource": "NIST SP 800-53 Rev. 5; AWS KMS security best practices",
+  "CISControl": "N/A — KMS permission scoping is not individually enumerated in CIS AWS 3.0.0 IAM controls",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - SC-12, SC-28"
+}

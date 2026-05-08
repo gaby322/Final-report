@@ -1,0 +1,46 @@
+SOURCE: MITRE ATT&CK® for Enterprise — Technique T1562.001
+TECHNIQUE: Impair Defenses: Disable or Modify Tools
+TACTIC: Defense Evasion
+ATT&CK ID: T1562.001
+PLATFORMS (per MITRE): Containers, IaaS, Linux, Network Devices, Windows, macOS
+URL: https://attack.mitre.org/techniques/T1562/001/
+TYPE: Curated synthesis of MITRE ATT&CK technique content and AWS CloudTrail/Config/GuardDuty documentation.
+
+DESCRIPTION:
+Adversaries may modify or disable security tools to avoid possible detection of their
+malware/tools and activities. In AWS cloud environments, this technique is observed as
+unauthorized modification or deletion of CloudTrail trails, disabling AWS Config rules,
+stopping GuardDuty detectors, or removing log delivery configurations.
+
+RELEVANT AWS API ACTIONS:
+- cloudtrail:DeleteTrail — permanently removes a CloudTrail trail, eliminating audit logs
+- cloudtrail:StopLogging — suspends log delivery without removing the trail configuration
+- cloudtrail:UpdateTrail — modifies trail settings (e.g., disabling log file validation)
+- guardduty:DeleteDetector — removes a GuardDuty detector for an account or region
+- guardduty:DisassociateMembers — removes member accounts from GuardDuty monitoring scope
+- config:DeleteConfigurationRecorder — stops AWS Config from recording resource changes
+- config:StopConfigurationRecorder — pauses Config recording without deleting the recorder
+- config:DeleteDeliveryChannel — removes the S3/SNS delivery channel for Config snapshots
+
+IAM-SPECIFIC RELEVANCE:
+An adversary who has obtained privileges via IAM privilege escalation (T1078.004 or T1098)
+may subsequently impair defenses to conceal ongoing access. Key indicators are:
+- CloudTrail deletion/modification following recent IAM permission changes
+- GuardDuty detector deletion by a newly privileged principal
+- Sequential pattern: IAM escalation → trail deletion (two-step concealment)
+
+DETECTION IN THIS FRAMEWORK:
+Phase 3 CloudTrail normalizer ingests cloudtrail.amazonaws.com and guardduty.amazonaws.com
+event sources. DeleteTrail, StopLogging, DeleteDetector, and StopConfigurationRecorder
+are in the MITRE_SENSITIVE_ACTIONS catalog under Defense Evasion tactic (event_sensitivity=MEDIUM).
+STRONGLY_CORRELATED alerts combining a prior Phase 2 escalation path with these events
+should be treated as HIGH confidence indicators of active exploitation.
+
+REMEDIATION POINTERS:
+- Enable CloudTrail log file integrity validation (SHA-256 hash chaining)
+- Apply SCP deny on cloudtrail:DeleteTrail and cloudtrail:StopLogging org-wide
+- Configure CloudWatch alarms on CloudTrail API errors and deletion events
+- Use AWS Config managed rule cloudtrail-enabled (rule identifier:
+  CLOUD_TRAIL_ENABLED) for continuous compliance monitoring. The rule's
+  published name is cloudtrail-enabled; the rule identifier used in Config
+  APIs is CLOUD_TRAIL_ENABLED. Both forms refer to the same managed rule.

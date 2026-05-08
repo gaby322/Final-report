@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_inline_policy_allows_privilege_escalation",
+  "CheckTitle": "Ensure inline IAM policies do not allow privilege escalation actions",
+  "Severity": "high",
+  "Description": "Inline IAM policies must not contain permissions enabling documented IAM privilege escalation paths. Privilege escalation actions include iam:CreatePolicyVersion, iam:AttachRolePolicy, iam:PassRole, iam:CreateLoginProfile, and related permissions that allow a principal to modify its own or others' permissions.",
+  "Risk": "A principal with escalation-capable permissions can grant themselves or others administrative access, bypassing the intended least-privilege design. Inline policies are embedded in the principal and harder to audit than managed policies.",
+  "Remediation": "Remove privilege escalation actions from inline policies. If a managed service legitimately requires these actions, replace the inline policy with a customer-managed policy that is documented, reviewed, and scoped with resource-level restrictions.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "NIST SP 800-53 Rev. 5 AC-6 (Least Privilege), CM-5 (Access Restrictions for Change). The inline policy form adds audit-visibility risk over and above the base escalation risk. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md; no primary source publishes a severity scale for this specific pattern.",
+  "AuthoritativeSource": "NIST SP 800-53 Rev. 5; AWS IAM documentation — Security best practices in IAM",
+  "CISControl": "N/A — privilege escalation action-set detection is not a numbered control in CIS AWS 3.0.0; grounded in NIST AC-6",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, CM-5",
+  "ThreatReference": "IAM privilege escalation via inline policy permission modification is widely documented in AWS cloud security research literature"
+}

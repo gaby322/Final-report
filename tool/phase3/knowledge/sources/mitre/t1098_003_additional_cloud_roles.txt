@@ -1,0 +1,27 @@
+# actions: CreatePolicyVersion,AttachUserPolicy
+
+Technique: T1098.003 — Account Manipulation: Additional Cloud Roles
+Tactics: Persistence, Privilege Escalation
+Platforms: IaaS, Identity Provider, Office Suite, SaaS
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1098/003/
+
+Description:
+Adversaries may add additional roles or permissions to an adversary-controlled cloud account to maintain persistent access to a tenant. This account modification may follow account creation or other malicious account activity, and may also involve modifying existing valid accounts that the adversary has already compromised.
+
+AWS examples explicitly noted by MITRE:
+- CreatePolicyVersion to define a new version of an IAM policy
+- AttachUserPolicy to attach an IAM policy with additional or distinct permissions to a compromised user account
+
+Detection:
+MITRE’s detection guidance focuses on identifying new IAM roles or policies attached to a user or service outside normal patterns or hours, and on behavioral chains in which a user is granted elevated privileges or roles following suspicious login or account creation activity.
+
+Mitigation:
+MITRE mitigation guidance includes:
+- using multi-factor authentication for user and privileged accounts
+- ensuring that all accounts use the least privileges they require
+- ensuring that low-privileged accounts do not have permissions to add permissions to accounts or update IAM policies
+
+Framework note:
+In this framework, additional IAM policy- and role-manipulation actions may also be analyzed in Phase 2 and Phase 3 as researcher-defined implementation mappings. Those broader action mappings should not be presented as if they were all explicitly enumerated by MITRE under this technique.

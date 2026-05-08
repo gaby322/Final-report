@@ -1,0 +1,50 @@
+SOURCE: AWS IAM Access Analyzer Documentation
+REFERENCE: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
+REFERENCE: https://docs.aws.amazon.com/access-analyzer/latest/APIReference/Welcome.html
+REFERENCE: https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-policy-checks.html
+REFERENCE: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-unused-access-analyzer.html
+TYPE: Summary of the cited authoritative AWS pages; paraphrased, not verbatim.
+
+AWS IAM ACCESS ANALYZER — OVERVIEW:
+AWS IAM Access Analyzer helps identify resources in your organization and accounts that
+are shared with an external entity. It uses automated reasoning (provable security) to
+analyze resource-based policies and generate findings when access is granted to external
+principals (outside your AWS organization or account).
+
+ANALYSIS TYPES:
+1. External Access Analysis: Identifies resources accessible from outside the AWS
+   account or organization zone of trust. Supported resource types include: S3 buckets,
+   IAM roles (trust policies), KMS keys, Lambda functions, SQS queues, Secrets Manager
+   secrets, SNS topics, EBS volume snapshots, RDS snapshots, ECR repositories.
+2. Unused Access Analysis: Identifies unused permissions, roles, and access keys.
+   Reports IAM roles with permissions unused for a configurable tracking period.
+   The tracking-period default is documented on the dedicated Unused Access
+   Analyzer page (https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-unused-access-analyzer.html);
+   this framework does not assert a specific default value here.
+3. Policy Validation: Analyzes IAM policy JSON for correctness, best-practice adherence,
+   and security warnings before policies are attached (preventive control).
+4. Policy Generation: Generates least-privilege IAM policies based on observed CloudTrail
+   access activity over a specified period.
+
+RELATIONSHIP TO THIS FRAMEWORK:
+- External Access findings complement Phase 1 RBAC checks by identifying cross-account
+  role trust exposures (iam_role_cross_account_readonlyaccess_policy rule).
+- Unused Access findings align with Phase 1 checks for inactive users/access keys
+  (iam_user_accesskey_unused, iam_user_console_access_unused rules).
+- Policy Validation output can be incorporated as an authoritative severity signal:
+  Access Analyzer policy validation produces ERROR, SECURITY_WARNING, GENERAL_WARNING,
+  and SUGGESTION finding categories mapped to specific policy checks (per
+  docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-policy-checks.html).
+- Access Analyzer does NOT detect privilege escalation paths — this is a differentiated
+  capability provided by Phase 2 of this framework.
+
+ACCESS ANALYZER POLICY-CHECK FINDING CATEGORIES (per the policy-checks reference page):
+- ERROR: Policy syntax error or invalid reference. Action: fix before deployment.
+- SECURITY_WARNING: Grants broader access than intended (e.g., wildcard principal).
+- GENERAL_WARNING: Policy may not achieve the intended effect (e.g., redundant Allow).
+- SUGGESTION: Minor improvement opportunity (e.g., more specific resource ARN).
+
+RELEVANT IAM ACTIONS:
+- access-analyzer:ValidatePolicy — analyze policy JSON before attachment
+- access-analyzer:ListFindings — retrieve analyzer findings programmatically
+- access-analyzer:CreateAnalyzer — configure a new analyzer for the account or org

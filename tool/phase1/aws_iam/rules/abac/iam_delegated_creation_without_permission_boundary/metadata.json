@@ -1,0 +1,17 @@
+{
+  "CheckID": "iam_delegated_creation_without_permission_boundary",
+  "CheckTitle": "Ensure delegated iam:CreateUser and iam:CreateRole grants require permission boundaries",
+  "Severity": "high",
+  "Description": "Policies granting iam:CreateUser or iam:CreateRole on Resource: * without an iam:PermissionsBoundary condition enable privilege escalation via delegated entity creation. A principal with unconstrained iam:CreateUser or iam:CreateRole can create a new user or role with AdministratorAccess, bypassing their own permission constraints — because the creator's permission boundary does not automatically propagate to created entities. Note: iam:PermissionsBoundary is an IAM administrative control attribute, not an ABAC tag attribute per NIST SP 800-162; this check enforces access control via permission boundary enforcement.",
+  "Risk": "A user with iam:CreateUser and iam:AttachUserPolicy but without admin privileges can create a new user with AdministratorAccess attached, effectively escalating to full account control. This escalation path is documented in the AWS IAM permissions boundaries documentation. The iam:PermissionsBoundary condition forces the creator to specify an approved boundary for the new entity, blocking this path.",
+  "Remediation": "Add iam:PermissionsBoundary conditions to all policies granting iam:CreateUser or iam:CreateRole. The condition should specify the ARN of an approved permission boundary policy that limits the maximum permissions of any created entity. See AWS documentation on delegating IAM administration with permission boundaries.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance", "privilege-escalation"],
+  "SeverityBasis": "AWS IAM documentation — Permissions boundaries for IAM entities explicitly describes unconstrained delegated creation as an escalation path. NIST SP 800-53 Rev. 5 AC-6 (Least Privilege), CM-5 (Access Restrictions for Change). High severity reflects direct path to admin access. Severity is assigned by the framework's three-tier classification model defined in docs/severity_classification_model.md.",
+  "AuthoritativeSource": "AWS IAM documentation — Permissions boundaries for IAM entities; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — iam:PermissionsBoundary enforcement is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, CM-5",
+  "ThreatReference": "Delegated IAM entity creation as a privilege escalation vector is documented in AWS security guidance and widely covered in cloud security research literature",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html"
+}

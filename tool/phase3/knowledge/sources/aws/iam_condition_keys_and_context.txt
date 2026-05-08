@@ -1,0 +1,39 @@
+# actions: AssumeRole,AssumeRoleWithSAML,AssumeRoleWithWebIdentity,TagUser,TagRole,UpdateAssumeRolePolicy
+
+AWS IAM and STS Condition Keys and Request Context
+Type: Curated synthesis from AWS official documentation
+Source: AWS IAM User Guide
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_iam-condition-keys.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html
+
+Overview:
+AWS policy conditions are evaluated against the request context. A Condition element can compare request attributes against global condition keys or service-specific condition keys.
+
+Condition-key categories:
+- Global condition keys use the aws: prefix.
+- Service-specific condition keys use a service prefix such as iam: or sts:.
+- IAM and AWS STS also support IAM-specific and STS-relevant condition context keys for trust, tagging, and identity controls.
+
+Examples relevant to IAM security:
+- aws:MultiFactorAuthPresent can be used to require MFA context
+- aws:PrincipalOrgID can restrict access to principals in a specific AWS Organization
+- aws:SourceAccount can help limit service-to-service confused-deputy exposure in supported patterns
+- sts:ExternalId is used in third-party cross-account role assumption scenarios
+- aws:ResourceTag and iam:ResourceTag can be used in tag-aware authorization logic
+
+ABAC relevance:
+Tag-aware authorization can use aws:PrincipalTag, aws:ResourceTag, aws:RequestTag, and aws:TagKeys. These keys are important when access decisions depend on tags attached to principals or resources.
+
+Trust-policy relevance:
+Condition keys are often critical in role trust policies. Even when a principal is listed in the Principal element, conditions may still be required to limit assumption to expected callers, organizations, or MFA-authenticated sessions.
+
+Relationship to this framework:
+This framework uses condition-key and request-context logic to interpret:
+- Phase 1 ABAC and trust-policy checks
+- Phase 2 edge feasibility and conditional transitions
+- Phase 3 explanation of why a role assumption or tag-sensitive action may be risky or constrained
+
+Framework note:
+This file is a curated AWS-only synthesis because request context, IAM condition keys, STS trust constraints, and confused-deputy protections are documented across multiple official pages rather than one single page.

@@ -1,0 +1,33 @@
+# actions: AssumeRole,AttachRolePolicy,PutRolePolicy,CreatePolicyVersion
+
+AWS Policy Evaluation for Requests Within a Single Account
+Type: Direct summary from AWS official documentation
+Source: AWS IAM User Guide
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-basics.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html
+
+Overview:
+For requests within a single AWS account, AWS evaluates the policies that apply to the request context and then decides whether the request is allowed or denied. AWS uses explicit deny logic and default deny logic.
+
+Core rules:
+- If any applicable policy explicitly denies the request, AWS denies the request.
+- If no applicable policy allows the request, AWS denies the request by default.
+- Identity-based policies and resource-based policies can both contribute to an allow decision in same-account scenarios.
+- Permissions boundaries restrict identity-based permissions by intersection.
+- AWS Organizations SCPs and RCPs can further restrict effective permissions.
+
+Same-account reasoning:
+AWS provides separate evaluation paths for IAM users and IAM roles. In same-account scenarios, the final result depends on the applicable policy types and whether any explicit deny overrides the request.
+
+Trust policy note:
+For IAM roles, the trust policy is a resource-based policy that controls who may call AssumeRole or related STS operations against the role. The role permissions policy separately controls what the resulting role session can do after assumption.
+
+Relationship to this framework:
+This framework uses same-account policy evaluation logic to interpret:
+- Phase 1 IAM misconfiguration findings
+- Phase 2 permission-transition feasibility
+- Phase 3 explanation of correlated access events
+
+Framework note:
+This file is a retrieval-oriented summary. AWS policy evaluation diagrams and examples remain the authoritative reference for edge cases.

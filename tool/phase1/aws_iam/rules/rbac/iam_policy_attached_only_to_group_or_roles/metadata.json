@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_policy_attached_only_to_group_or_roles",
+  "CheckTitle": "Ensure IAM users receive permissions only through groups",
+  "Severity": "medium",
+  "Description": "IAM policies must not be attached directly to individual users. Permissions should be granted via groups (for multiple users) or roles (for programmatic/federated access). Direct user policy attachment makes access management, auditing, and revocation significantly more complex.",
+  "Risk": "Direct user policy attachments scatter access control across individual principals, making it difficult to audit who has what permissions, ensure consistent policy application, and quickly revoke access during an incident.",
+  "Remediation": "Move all user-attached managed and inline policies to IAM groups or roles. Assign users to appropriate groups. Use IAM roles for service-to-service and federated access.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.15 (Level 1); AWS Security Hub FSBP IAM.1 (ASFF score 64 / MEDIUM)",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.15 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-2, AC-3",
+  "ReferenceControlId": "IAM.1",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-1"
+}

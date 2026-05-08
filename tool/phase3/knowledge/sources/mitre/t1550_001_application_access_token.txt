@@ -1,0 +1,25 @@
+# actions: GetFederationToken,AssumeRole,AssumeRoleWithSAML,AssumeRoleWithWebIdentity,GetSessionToken
+
+Technique: T1550.001 — Use Alternate Authentication Material: Application Access Token
+Tactics: Defense Evasion, Lateral Movement
+Platforms: Containers, IaaS, Identity Provider, Office Suite, SaaS
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1550/001/
+
+Description:
+Adversaries may use stolen application access tokens to bypass the typical authentication process and access restricted accounts, information, or services on remote systems. These tokens are commonly used to make authorized API requests on behalf of a user or service, especially in cloud and SaaS environments.
+
+MITRE notes that in AWS and GCP environments, adversaries can request a short-lived access token with the privileges of another user account. In AWS, MITRE specifically notes that an adversary who compromises a user’s AWS API credentials may use sts:GetFederationToken to create a federated user session that has the same permissions as the original user and may persist even if the original user credentials are deactivated.
+
+Detection:
+MITRE’s detection strategy includes monitoring the use of AWS STS or similar APIs to request temporary tokens or federation sessions in ways that are inconsistent with normal account activity, such as requests from unexpected principals or regions.
+
+Mitigation:
+MITRE mitigation guidance includes:
+- restricting use of access tokens outside expected contexts
+- auditing cloud accounts and their permissions
+- disabling the ability to request temporary account tokens on behalf of other accounts where possible
+
+Framework note:
+The # actions metadata line is framework retrieval metadata used by this project’s KB builder. In this framework, broader STS role-assumption actions such as AssumeRole, AssumeRoleWithSAML, AssumeRoleWithWebIdentity, and GetSessionToken may also be retrieved and analyzed because they are operationally relevant to cloud token abuse and temporary credential use. However, they should not all be presented as explicit MITRE AWS procedure examples unless directly supported by the MITRE technique page.

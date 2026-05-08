@@ -1,0 +1,36 @@
+# actions: AssumeRole,AssumeRoleWithSAML,AssumeRoleWithWebIdentity,UpdateAssumeRolePolicy
+
+AWS Cross-Account Policy Evaluation Logic
+Type: Direct summary from AWS official documentation
+Source: AWS IAM User Guide
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies-cross-account-resource-access.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+
+Overview:
+When a principal in one AWS account requests access to a resource in another AWS account, AWS performs cross-account policy evaluation. AWS evaluates the request in both the trusted account and the trusting account.
+
+Core rule:
+A cross-account request is allowed only if both evaluations return Allow.
+
+Trusted and trusting sides:
+- The trusted side is the caller’s account, where identity-based permissions are evaluated.
+- The trusting side is the resource owner’s account, where the resource-based policy or role trust policy is evaluated.
+
+Cross-account access requirements:
+- A resource-based policy or trust policy in the trusting account must allow the external principal or account.
+- An identity-based policy in the trusted account must also allow the calling principal to make the request.
+- If either side does not allow the request, the final result is deny.
+
+Role-assumption relevance:
+For cross-account AssumeRole access, the target role’s trust policy defines which external principal or account may assume the role, while the external caller still needs permission to call sts:AssumeRole on that role.
+
+Relationship to this framework:
+This framework uses cross-account policy evaluation logic to reason about:
+- cross-account trust relationships
+- role assumption feasibility
+- graph edges involving external principals
+- CloudTrail events that traverse account boundaries
+
+Framework note:
+This file is a retrieval-oriented summary of AWS cross-account logic. The AWS diagrams and examples remain the authoritative reference for exact evaluation behavior.

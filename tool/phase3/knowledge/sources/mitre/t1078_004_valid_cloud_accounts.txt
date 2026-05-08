@@ -1,0 +1,26 @@
+# actions: CreateLoginProfile,UpdateLoginProfile
+
+Technique: T1078.004 — Valid Accounts: Cloud Accounts
+Tactics: Defense Evasion, Persistence, Privilege Escalation, Initial Access
+Platforms: IaaS, Identity Provider, Office Suite, SaaS
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1078/004/
+
+Description:
+Adversaries may obtain and abuse credentials of cloud accounts to bypass access controls and perform actions associated with initial access, persistence, privilege escalation, or defense evasion. Cloud accounts may be cloud-only or hybrid/federated with on-premises identity systems, which can allow adversaries to affect both cloud and on-premises environments.
+
+MITRE notes that compromised cloud accounts may be used to create Additional Cloud Credentials or to assume Temporary Elevated Cloud Access when role assignments or role assumption policies are misconfigured. Over-privileged cloud accounts may also be used to access sensitive data through cloud APIs.
+
+Detection:
+MITRE’s detection strategy emphasizes anomalous authentication and account-usage patterns, such as sign-ins from unusual locations, usage that exceeds the normal scope of the account, or API activity inconsistent with the account’s historical behavior.
+
+Mitigation:
+MITRE mitigation guidance includes:
+- requiring multi-factor authentication for cloud accounts, especially privileged accounts
+- enforcing strong password and access key rotation policies
+- routinely reviewing privileged cloud account permission levels
+- periodically reviewing user accounts and removing inactive or unnecessary accounts
+
+Framework note:
+The # actions metadata line is framework retrieval metadata used by this project’s KB builder. In this framework, CreateLoginProfile and UpdateLoginProfile may be analyzed as implementation-level signals associated with cloud-account abuse, but they should not be presented as direct MITRE AWS procedure examples unless explicitly stated on the MITRE page.

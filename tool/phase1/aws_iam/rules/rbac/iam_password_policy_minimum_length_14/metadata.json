@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_password_policy_minimum_length_14",
+  "CheckTitle": "Ensure IAM password policy requires minimum length of 14 or greater",
+  "Severity": "medium",
+  "Description": "The IAM account password policy must require a minimum password length of 14 characters. Longer passwords are exponentially harder to brute-force and substantially reduce the risk of credential guessing attacks.",
+  "Risk": "Passwords shorter than 14 characters are more susceptible to brute-force and dictionary attacks. Short passwords reduce the entropy of the credential set across all IAM users in the account.",
+  "Remediation": "Update the IAM account password policy to require a minimum length of 14 characters via the AWS Management Console (IAM > Account settings) or CLI: aws iam update-account-password-policy --minimum-password-length 14.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::AccountPasswordPolicy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.8 (Level 1); NIST SP 800-63B Section 5.1.1.2 recommends minimum 8 characters; CIS raises the bar to 14 for cloud environments",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-63B",
+  "CISControl": "CIS AWS 3.0.0 - 1.8 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-5(1)"
+}

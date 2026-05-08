@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phase 1 IAM Check Metadata",
+  "description": "Schema for every metadata.json accompanying a Phase 1 IAM rule. Every field is mandatory unless marked optional.",
+  "type": "object",
+  "required": [
+    "CheckID",
+    "CheckTitle",
+    "Severity",
+    "Description",
+    "Risk",
+    "Remediation",
+    "ServiceName",
+    "ResourceType",
+    "Categories",
+    "SeverityBasis",
+    "AuthoritativeSource",
+    "CISControl",
+    "NISTControl"
+  ],
+  "properties": {
+    "CheckID": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$",
+      "minLength": 3
+    },
+    "CheckTitle": {
+      "type": "string",
+      "minLength": 10
+    },
+    "Severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "informational"]
+    },
+    "Description": {
+      "type": "string",
+      "minLength": 40
+    },
+    "Risk": {
+      "type": "string",
+      "minLength": 40
+    },
+    "Remediation": {
+      "type": "string",
+      "minLength": 20
+    },
+    "ServiceName": {
+      "type": "string",
+      "minLength": 2
+    },
+    "ResourceType": {
+      "type": "string",
+      "pattern": "^AWS::[A-Za-z0-9]+::[A-Za-z0-9]+$"
+    },
+    "Categories": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "SeverityBasis": {
+      "type": "string",
+      "minLength": 30,
+      "description": "Explicit grounding of the severity assignment in an authoritative source or the framework's severity classification model."
+    },
+    "AuthoritativeSource": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Primary source(s) only: CIS AWS Foundations Benchmark, AWS Security Hub FSBP, AWS official documentation, NIST SP 800-53/800-162/800-63. Secondary sources belong in ThreatReference."
+    },
+    "CISControl": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Either a CIS AWS 3.0.0 control identifier (e.g., 'CIS AWS 3.0.0 - 1.7 (Level 1)') or an explicit 'N/A — <reason>' string."
+    },
+    "NISTControl": {
+      "type": "string",
+      "minLength": 3,
+      "description": "NIST SP 800-53 Rev. 5 control identifier(s), e.g., 'NIST SP 800-53 Rev. 5 - AC-6, CM-5'."
+    },
+    "ThreatReference": {
+      "type": "string",
+      "description": "Optional secondary threat-intelligence reference (MITRE ATT&CK, security research). Must NOT appear in AuthoritativeSource."
+    },
+    "ReferenceUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "Deprecated": {"type": "boolean"},
+    "DeprecationReason": {"type": "string"}
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {"AuthoritativeSource": {"pattern": "(?i)(Rhino Security|CloudGoat|MITRE ATT)"}}
+      },
+      "then": {
+        "not": {"required": ["AuthoritativeSource"]},
+        "description": "Secondary sources (Rhino Security Labs, CloudGoat, MITRE ATT&CK) must not appear in AuthoritativeSource — move them to ThreatReference."
+      }
+    },
+    {
+      "if": {
+        "properties": {"CISControl": {"pattern": "(?i)aligns with"}}
+      },
+      "then": {
+        "not": {"required": ["CISControl"]},
+        "description": "The phrase 'aligns with' is not permitted in CISControl — use explicit 'N/A — <reason>' or a numbered control identifier."
+      }
+    }
+  ]
+}

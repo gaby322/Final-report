@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_role_administratoraccess_policy",
+  "CheckTitle": "Ensure IAM roles do not have full administrative privileges",
+  "Severity": "high",
+  "Description": "IAM roles must not have policies granting full administrative privileges (Action: '*' and Resource: '*') unless the role is explicitly designated as a break-glass emergency role with documented justification and strict assumption controls.",
+  "Risk": "IAM roles with admin privileges grant unrestricted account control to any principal that can assume the role. A misconfigured trust policy or privilege escalation allows an attacker to assume the role and gain full account control.",
+  "Remediation": "Replace admin policies on roles with scoped policies. For break-glass roles, restrict the trust policy to specific principals with MFA conditions, enable CloudTrail alerting on role assumption, and implement time-limited access.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Role",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.16 (Level 1); roles with admin access are a common escalation target in privilege escalation attack chains",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; NIST SP 800-53 Rev. 5",
+  "CISControl": "CIS AWS 3.0.0 - 1.16 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-3"
+}

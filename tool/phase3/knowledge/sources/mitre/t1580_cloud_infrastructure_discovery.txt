@@ -1,0 +1,50 @@
+SOURCE: MITRE ATT&CK® for Enterprise (Cloud) — Technique T1580
+TECHNIQUE: Cloud Infrastructure Discovery
+TACTIC: Discovery
+ATT&CK ID: T1580
+URL: https://attack.mitre.org/techniques/T1580/
+NOTE: Curated synthesis of MITRE ATT&CK wiki content and AWS IAM/EC2/STS documentation.
+
+DESCRIPTION:
+Adversaries may attempt to discover infrastructure and resources available within an
+infrastructure-as-a-service (IaaS) environment. In AWS, this encompasses enumeration
+of EC2 instances, S3 buckets, IAM roles, Lambda functions, RDS databases, and other
+resources to map the attack surface before lateral movement or data collection.
+
+RELEVANT AWS API ACTIONS:
+- ec2:DescribeInstances — enumerate running EC2 instances with metadata
+- ec2:DescribeSecurityGroups — map network security group rules
+- ec2:DescribeVpcs / DescribeSubnets — network topology enumeration
+- iam:ListRoles — enumerate IAM roles (prerequisite for trust policy analysis)
+- iam:ListUsers — enumerate IAM users
+- iam:GetRole / iam:GetRolePolicy — read specific role permissions
+- iam:SimulatePrincipalPolicy — test permissions without making actual API calls
+- s3:ListAllMyBuckets — enumerate all S3 buckets in the account
+- lambda:ListFunctions — enumerate Lambda functions (potential lateral movement targets)
+- sts:GetCallerIdentity — determine current principal ARN and account ID (reconnaissance)
+
+IAM-SPECIFIC RELEVANCE:
+Cloud infrastructure discovery often precedes privilege escalation. An adversary with
+limited initial permissions who calls iam:ListRoles, iam:GetRole, and iam:ListPolicies
+is likely mapping the environment to identify escalation targets. This maps to the
+reconnaissance phase before exploiting a privilege escalation path identified by
+Phase 2 of this framework.
+sts:GetCallerIdentity is frequently the very first action taken after credential theft.
+
+DETECTION IN THIS FRAMEWORK:
+iam:GenerateCredentialReport, iam:GetCredentialReport (T1087.004 Account Discovery) are
+in the Phase 3 MITRE_SENSITIVE_ACTIONS catalog. Discovery events from the same principal
+ARN as a Phase 2 source node (scp-cleared escalation path) indicate active pre-attack
+reconnaissance and should trigger PARTIALLY_CORRELATED or STRONGLY_CORRELATED alerts.
+
+REMEDIATION POINTERS:
+- Apply IAM permissions boundary restricting iam:List* and iam:Get* for non-admin roles
+- Enable GuardDuty monitoring for the authoritative IAM credential-exfiltration
+  finding types:
+    UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS
+    UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.OutsideAWS
+  (per docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-iam.html;
+  the bare "InstanceCredentialExfiltration" string without a suffix is not a
+  published GuardDuty finding type).
+- Use AWS Config to alert on unusual iam:ListRoles / iam:SimulatePrincipalPolicy calls
+- Log all sts:GetCallerIdentity calls in CloudTrail (low cost, high signal)

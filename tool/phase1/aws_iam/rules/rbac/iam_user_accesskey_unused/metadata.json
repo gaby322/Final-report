@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_user_accesskey_unused",
+  "CheckTitle": "Ensure credentials unused for 45 days or greater are disabled (access keys)",
+  "Severity": "medium",
+  "Description": "Active access keys that have not been used for 45 days or more must be disabled or deleted. Inactive credentials represent an unnecessary attack surface; if compromised, they may provide persistent access that goes undetected for long periods.",
+  "Risk": "Stale access keys that are not regularly used may belong to departed employees, deprecated services, or forgotten integrations. If exfiltrated, they enable long-term persistent access without triggering usage-based detection alerts.",
+  "Remediation": "Disable or delete access keys unused for 45 or more days via the IAM console or CLI. Implement automated deactivation using AWS Config rules or custom Lambda functions that monitor the credential report.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::AccessKey",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.12 (Level 1) — explicitly specifies 45-day threshold; AWS Security Hub FSBP IAM.22 (ASFF score 64 / MEDIUM)",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.12 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-4, IA-5",
+  "ReferenceControlId": "IAM.22",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-22"
+}

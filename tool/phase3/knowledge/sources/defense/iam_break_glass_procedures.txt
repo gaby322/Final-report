@@ -1,0 +1,44 @@
+SOURCE: AWS Security Documentation — Emergency Access Procedures
+REFERENCE: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_control-access_disable-perms.html
+REFERENCE: https://aws.amazon.com/blogs/security/how-to-use-aws-iam-to-manage-emergency-access/
+NOTE: Curated synthesis of AWS security blog content and IAM documentation. Labeled as synthesis.
+
+BREAK-GLASS ACCESS IN AWS — OVERVIEW:
+Break-glass (emergency access) procedures define how privileged access is obtained in
+crisis situations when normal access pathways are unavailable. In AWS environments,
+break-glass accounts or roles are pre-provisioned with elevated permissions but kept
+isolated from routine use. Their use should be detectable, auditable, and revocable.
+
+STANDARD BREAK-GLASS ARCHITECTURE:
+1. Dedicated Break-Glass IAM Role: A role with elevated permissions (e.g., Administrator
+   access) that is normally inaccessible. Trust policy restricts AssumeRole to specific
+   principals with MFA required (Condition: {"Bool": {"aws:MultiFactorAuthPresent": "true"}}).
+2. Break-Glass User Account: A separate IAM user with no permissions except sts:AssumeRole
+   on the break-glass role. Credentials are stored in a physical safe or offline vault.
+3. CloudWatch Alarm on Usage: A CloudWatch metric filter monitors CloudTrail for
+   AssumeRole calls on the break-glass role ARN. Any usage triggers immediate alerting.
+4. Session Duration Limit: MaxSessionDuration on the break-glass role is set to 1 hour
+   (minimum needed for the emergency task), not the default 12 hours.
+5. Post-Use Review: All actions taken during break-glass sessions must be reviewed via
+   CloudTrail within 24 hours. The break-glass role's access keys are rotated afterward.
+
+RELATIONSHIP TO FRAMEWORK FINDINGS:
+Phase 3 alerts involving the break-glass role ARN should be treated specially:
+- A STRONGLY_CORRELATED alert on a break-glass role assumption may be legitimate (authorized)
+  or malicious (stolen break-glass credentials). Context is critical.
+- Phase 1 findings on break-glass roles (e.g., missing MFA condition) represent HIGH severity
+  because they eliminate the primary control distinguishing authorized from unauthorized use.
+- Phase 2 paths through break-glass roles to admin principals are expected by design, but
+  should still be reported so that trust policy conditions (MFA requirement) are verified.
+
+REMEDIATION GUIDANCE FOR BREAK-GLASS ROLE FINDINGS:
+- Add Condition: {"Bool": {"aws:MultiFactorAuthPresent": "true"}} to break-glass trust policy
+- Set MaxSessionDuration to 3600 (one hour) on break-glass roles
+- Apply tagging: aws:RequestTag/Purpose=BreakGlass for ABAC tracking
+- Enable CloudTrail data events for the break-glass role ARN specifically
+- Review break-glass role usage in CloudTrail at minimum monthly (AWS Config rule)
+
+FALSE POSITIVE CONSIDERATION FOR PHASE 3:
+When evaluating alerts involving known break-glass role ARNs, the LLM false_positive_assessment
+should note that usage during a declared incident may be authorized. Cross-reference with
+incident management system timestamps if available.

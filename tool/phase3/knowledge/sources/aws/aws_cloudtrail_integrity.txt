@@ -1,0 +1,46 @@
+SOURCE: AWS CloudTrail Documentation — Log File Integrity Validation and Monitoring
+REFERENCE: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
+REFERENCE: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/monitor-cloudtrail-log-files-with-cloudwatch-logs.html
+TYPE: Summary of the cited authoritative AWS pages; paraphrased, not verbatim.
+
+CLOUDTRAIL LOG INTEGRITY — OVERVIEW:
+AWS CloudTrail log file integrity validation uses SHA-256 hashing and SHA-256 with RSA
+for digital signing of digest files. When enabled, CloudTrail creates a digest file for
+every hour of log delivery, containing SHA-256 hashes of all log files in that period.
+The digest file itself is signed by AWS using a public-private key pair.
+
+INTEGRITY VALIDATION SIGNIFICANCE:
+- Tampered log files can be detected because their computed SHA-256 hash will not match
+  the hash recorded in the digest file.
+- Deleted log files are detected because the digest references them by hash.
+- Deleted digest files are detectable via the chain of digest file references.
+- This provides cryptographic evidence that CloudTrail records have not been modified or
+  deleted after delivery — a critical capability for forensic investigations.
+
+RELEVANT API ACTIONS FOR INTEGRITY:
+- cloudtrail:CreateTrail — should require log file validation enabled (EnableLogFileValidation=True)
+- cloudtrail:UpdateTrail — can disable log file validation (security regression)
+- cloudtrail:DeleteTrail — T1562.001 indicator; eliminates future log delivery
+- cloudtrail:StopLogging — suspends logging without deleting the trail
+
+CLOUDTRAIL MONITORING WITH CLOUDWATCH:
+CloudTrail can deliver events to CloudWatch Logs for real-time metric filtering and alarms.
+CIS AWS Foundations Benchmark Recommendation 4.x specifies metric filters and alarms for:
+- Unauthorized API calls (ErrorCode = AccessDenied or UnauthorizedAccess)
+- Root account usage
+- IAM policy changes (eventName starts with Create/Update/Delete* and eventSource=iam.amazonaws.com)
+- CloudTrail configuration changes
+- S3 bucket policy changes
+
+FRAMEWORK INTEGRATION:
+Phase 3 CloudTrail normalizer ingests events from cloudtrail.amazonaws.com. Detection of
+DeleteTrail or StopLogging from a principal with a Phase 2 escalation path constitutes a
+STRONGLY_CORRELATED alert with MITRE T1562.001 (Defense Evasion). Log integrity enables
+forensic confirmation that prior Phase 3 CloudTrail evidence has not been tampered with.
+
+KEY CLOUDTRAIL LIMITATIONS RELEVANT TO FRAMEWORK:
+- CloudTrail records management events by default; data events (S3 object access, Lambda
+  invocations) require explicit configuration and incur additional cost.
+- Lookup Events API has a 90-day lookback limit and is rate-limited (2 requests/second).
+- Cross-account trail delivery to a central S3 bucket requires bucket policy allowing
+  the source account's CloudTrail service principal.

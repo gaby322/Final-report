@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_support_role_created",
+  "CheckTitle": "Ensure a support role has been created to manage incidents with AWS Support",
+  "Severity": "low",
+  "Description": "An IAM role with the AWSSupportAccess managed policy must exist to allow authorized personnel to interact with AWS Support without requiring root or administrator credentials. CIS 1.17 requires this role to ensure incident response does not depend on over-privileged credentials.",
+  "Risk": "Without a dedicated support role, AWS Support cases and incident response require higher-privileged credentials, violating the principle of least privilege and potentially exposing broader account access to support workflows.",
+  "Remediation": "Create an IAM role and attach the AWS managed policy AWSSupportAccess (arn:aws:iam::aws:policy/AWSSupportAccess). Restrict role assumption to the specific IAM principals responsible for support interactions.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Role",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.17 (Level 1); low severity reflects that the missing role is an operational gap rather than a direct security vulnerability",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0",
+  "CISControl": "CIS AWS 3.0.0 - 1.17 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IR-7 (Incident Response Assistance), AC-6"
+}

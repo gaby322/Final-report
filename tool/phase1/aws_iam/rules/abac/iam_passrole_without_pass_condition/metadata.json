@@ -1,0 +1,17 @@
+{
+  "CheckID": "iam_passrole_without_pass_condition",
+  "CheckTitle": "Ensure iam:PassRole grants are restricted by iam:PassedToService or resource tag conditions",
+  "Severity": "high",
+  "Description": "Policies granting iam:PassRole on Resource: * without iam:PassedToService or aws:ResourceTag/* conditions allow a principal to pass any role — including high-privilege roles — to any AWS service. This is a documented IAM privilege escalation vector: a low-privilege identity with unrestricted iam:PassRole can instantiate a service (e.g., EC2 instance, Lambda function) that assumes an admin role on its behalf.",
+  "Risk": "Unrestricted iam:PassRole allows privilege escalation via service instantiation. An attacker with iam:PassRole and ec2:RunInstances can pass an admin role to a new EC2 instance and use its instance profile to perform privileged operations. This vector is explicitly documented in the AWS IAM documentation section on granting permissions to pass a role.",
+  "Remediation": "Add iam:PassedToService conditions to restrict PassRole to specific target services (e.g., ec2.amazonaws.com, lambda.amazonaws.com). Alternatively, add aws:ResourceTag/* conditions to restrict which roles can be passed by attribute. If possible, restrict the Resource element to specific role ARNs instead of using Resource: *.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance", "abac", "privilege-escalation"],
+  "SeverityBasis": "AWS IAM documentation explicitly documents iam:PassRole as a privilege escalation vector when used without conditions; NIST SP 800-53 Rev. 5 AC-6 (Least Privilege), CM-5 (Access Restrictions for Change). High severity reflects that exploitation requires only a companion service-instantiation permission alongside iam:PassRole.",
+  "AuthoritativeSource": "AWS IAM documentation — Granting a user permissions to pass a role to an AWS service; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — PassRole condition enforcement is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, CM-5",
+  "ThreatReference": "Security research on IAM privilege escalation paths via iam:PassRole + service instantiation (widely documented in cloud security literature)",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html"
+}

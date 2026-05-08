@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_user_mfa_enabled_console_access",
+  "CheckTitle": "Ensure MFA is enabled for all IAM users that have a console password",
+  "Severity": "high",
+  "Description": "Multi-factor authentication (MFA) must be enabled for all IAM users who have a console password. Without MFA, a compromised password alone is sufficient to authenticate to the AWS Management Console.",
+  "Risk": "IAM users without MFA are vulnerable to credential-based attacks (phishing, password spray, credential stuffing). A single compromised password grants full console access up to the user's permission scope with no additional authentication barrier.",
+  "Remediation": "Enable MFA for each IAM user with a console password using virtual MFA (TOTP) or hardware MFA. Enforce MFA via IAM policy condition aws:MultiFactorAuthPresent for sensitive operations.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.10 (Level 1); AWS Security Hub FSBP IAM.5 (ASFF score 64 / MEDIUM); CIS Level 1 designation and direct authentication bypass risk warrant High severity",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.10 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - IA-2(1), IA-2(2)",
+  "ReferenceControlId": "IAM.5",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-5"
+}

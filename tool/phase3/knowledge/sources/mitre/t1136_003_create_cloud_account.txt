@@ -1,0 +1,29 @@
+# actions: CreateUser
+
+Technique: T1136.003 — Create Account: Cloud Account
+Tactic: Persistence
+Platforms: IaaS, Identity Provider, Office Suite, SaaS
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1136/003/
+
+Description:
+Adversaries may create a cloud account to maintain access to victim systems. With a sufficient level of access, such accounts may be used to establish secondary credentialed access that does not require persistent remote access tools to be deployed on the system.
+
+MITRE notes that cloud accounts can include both user accounts and service-associated accounts, depending on how the cloud provider models identity. MITRE also notes that AWS resources can be granted permission to assume roles.
+
+AWS reference on the MITRE T1136.003 page:
+- CreateUser appears in MITRE's T1136.003 detection analytics block as a
+  CloudTrail event to monitor for new IAM account creation. CreateUser is
+  NOT cited as an adversary procedure example in the technique narrative
+  itself — it appears only in the detection analytics. Treat it as a
+  MITRE-listed detection signal, not as a MITRE-cited adversary procedure.
+
+Detection:
+MITRE’s detection strategy highlights cloud account creation through API, CLI, or console activity, especially when CreateUser events are followed by policy attachment or credential generation. Such sequences are higher-value signals than isolated account creation alone.
+
+Mitigation:
+MITRE mitigation guidance includes using multi-factor authentication for user and privileged accounts and limiting the number of identities that can create other accounts. Privileged account creation rights should be tightly restricted.
+
+Framework note:
+In this framework, some additional IAM actions such as CreateRole may be analyzed as implementation-level signals related to cloud identity persistence. However, those broader mappings should not be presented as direct MITRE procedure examples unless explicitly supported by the MITRE technique page.

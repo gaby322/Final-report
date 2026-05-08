@@ -1,0 +1,49 @@
+# actions: AttachRolePolicy,PutRolePolicy,CreatePolicyVersion,UpdateAssumeRolePolicy,CreateAccessKey,DeactivateMFADevice,TagUser,TagRole
+
+IAM Security Remediation Guidance
+Type: Curated synthesis from AWS official documentation
+Source: AWS IAM best practices and related AWS documentation
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-policy-checks.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_common-scenarios_third-party.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html
+URL: https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html
+URL: https://docs.aws.amazon.com/config/latest/developerguide/iam-user-no-policies-check.html
+
+Purpose:
+This file provides retrieval-friendly remediation guidance for IAM misconfigurations and identity-risk findings using AWS official documentation. It is intended to support Phase 3 explanations and recommended actions.
+
+Remediation theme: overly permissive IAM permissions
+- Apply least privilege instead of broad wildcard access
+- Review policies with IAM Access Analyzer policy validation
+- Where possible, refine permissions using IAM Access Analyzer policy generation from CloudTrail activity
+- Use permissions boundaries when delegating permissions management within an account
+
+Remediation theme: risky policy and trust changes
+- Restrict who can attach policies, create new policy versions, or update trust policies
+- Review cross-account trust carefully
+- Use external IDs for third-party cross-account access where appropriate to mitigate confused-deputy risk
+- Continuously review public and cross-account exposure with IAM Access Analyzer
+
+Remediation theme: long-term credentials and MFA
+- Prefer temporary credentials and IAM roles over long-term access keys
+- Rotate or remove long-term access keys when they are still required
+- Require MFA for human users, especially privileged users
+- Protect root credentials and avoid root access keys
+
+Remediation theme: direct user policy attachment
+- Prefer permission assignment through groups or roles rather than attaching policies directly to IAM users
+- Review IAM users with directly attached policies and move those permissions to groups or roles when practical
+
+Remediation theme: ABAC tag governance
+- If tags are used in authorization, protect the tag model as part of the security boundary
+- Restrict who may set or modify authorization-relevant tags
+- Use request-tag and tag-key conditions to constrain allowed tagging operations
+- Review tag-modification permissions on IAM users, roles, and target resources
+
+Relationship to this framework:
+This guidance supports Phase 3 alert explanation and remediation suggestions. It should be treated as curated AWS-based defensive guidance, not as a formal compliance baseline.

@@ -1,0 +1,29 @@
+# actions: AttachRolePolicy,CreatePolicyVersion,PutRolePolicy,UpdateAssumeRolePolicy
+
+AWS IAM Access Analyzer — Policy Validation and Access Findings
+Source: AWS IAM official documentation
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-policy-checks.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
+
+Overview:
+AWS IAM Access Analyzer helps identify unintended access and policy issues across AWS environments. Relevant capabilities include:
+- policy validation for IAM and resource-based policies
+- external access analysis for supported resource types
+- unused access analysis for IAM users and roles
+
+Policy validation:
+IAM Access Analyzer provides policy checks that identify errors, security warnings, general warnings, and suggestions. These checks help detect malformed or risky policy constructs before or during deployment.
+
+Examples of relevant policy-validation categories:
+- missing required elements such as Principal in resource-based policies
+- invalid or unsupported actions, resources, or condition usage
+- broad or risky policy patterns that may weaken intended access control
+
+External access analysis:
+IAM Access Analyzer can generate findings when supported resources are accessible from outside the account or organization. AWS documents IAM roles among the supported resource types for external access analysis.
+
+Unused access analysis:
+IAM Access Analyzer can generate findings for unused IAM roles, unused access keys, unused passwords, and unused services or actions associated with active IAM identities.
+
+Relationship to this framework:
+Phase 1 uses rule-based checks that are conceptually related to the kinds of issues IAM Access Analyzer can surface, especially around overly broad access, risky trust relationships, and policy quality. However, Phase 1 uses framework-specific logic and should not be described as a direct wrapper around the Access Analyzer API.

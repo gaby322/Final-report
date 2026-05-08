@@ -1,0 +1,32 @@
+# actions: AssumeRole,CreateAccessKey,GenerateCredentialReport,GetCredentialReport,AttachRolePolicy,UpdateAssumeRolePolicy
+
+AWS CloudTrail — LookupEvents and Event History Limits
+Source: AWS CloudTrail official documentation
+URL: https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html
+URL: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html
+URL: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html
+
+LookupEvents API:
+LookupEvents is an AWS CloudTrail API that can look up management events and CloudTrail Insights events captured by CloudTrail for the past 90 days in a Region.
+
+Lookup characteristics:
+- maximum 50 results per response
+- pagination via NextToken
+- request rate limit of 2 lookup requests per second per account per Region
+- LookupAttributes currently support only one attribute per request
+- supported management-event lookup attributes include EventId, EventName, EventSource, ReadOnly, ResourceName, ResourceType, Username, and AccessKeyId
+
+Event history:
+CloudTrail event history is enabled by default and provides a searchable record of the past 90 days of management events in a single AWS account and Region.
+
+Important limitations of event history:
+- shows management events only
+- does not show data events, Insights events, or network activity events
+- does not provide organization-level aggregation
+- is limited to a single account, a single Region, one attribute filter, and a time range
+
+Relationship to this framework:
+Phase 3 uses LookupEvents-compatible CloudTrail management-event retrieval as an initial dynamic evidence source. The collector writes raw events to disk, and the normalizer extracts fields needed for IAM correlation.
+
+Framework note:
+This framework currently focuses on IAM/STS-relevant management events. Full CloudTrail coverage would require trails or event data stores for broader event types and longer retention.

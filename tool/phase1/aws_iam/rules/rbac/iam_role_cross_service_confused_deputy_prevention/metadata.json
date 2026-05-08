@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_role_cross_service_confused_deputy_prevention",
+  "CheckTitle": "Ensure IAM roles used by AWS services include aws:SourceArn or aws:SourceAccount conditions to prevent confused deputy attacks",
+  "Severity": "high",
+  "Description": "IAM roles whose trust policies allow AWS service principals (e.g., lambda.amazonaws.com, ec2.amazonaws.com) to assume them should include aws:SourceArn, aws:SourceAccount, or aws:SourceOrgID conditions. Without these conditions, any resource in any account using that service could potentially assume the role.",
+  "Risk": "The confused deputy problem occurs when a service principal can be tricked into performing actions on behalf of a different customer's resource. Without source ARN conditions, a malicious actor controlling a resource in another account could potentially leverage the service to assume your role.",
+  "Remediation": "Add aws:SourceArn or aws:SourceAccount conditions to trust policies for service-principal roles. See AWS documentation on confused deputy prevention for service-specific recommended conditions.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Role",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS IAM documentation — confused deputy problem prevention; NIST SP 800-53 Rev. 5 SC-11 (Trusted Path), AC-4 (Information Flow Enforcement); cross-service confused deputy is an AWS-documented attack vector",
+  "AuthoritativeSource": "AWS IAM documentation — Preventing confused deputy problem; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — confused deputy prevention is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - SC-11, AC-4",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html"
+}

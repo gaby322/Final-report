@@ -1,0 +1,49 @@
+SOURCE: AWS Organizations Documentation — Service Control Policies (SCPs)
+REFERENCE: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+REFERENCE: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+TYPE: Summary of the cited authoritative AWS pages; paraphrased, not verbatim.
+
+SERVICE CONTROL POLICIES (SCPs) — OVERVIEW:
+Service Control Policies are a type of organization policy that you can use to manage
+permissions in your organization. SCPs offer central control over the maximum available
+permissions for all accounts in your organization.
+
+KEY EVALUATION RULES:
+1. SCPs do not grant permissions. They define the maximum permissions that identity-based
+   policies can grant to IAM principals (users and roles) in member accounts.
+2. An effective permission requires BOTH: (a) SCP Allow (or no SCP deny in deny-list strategy),
+   AND (b) IAM identity-based policy Allow.
+3. An explicit SCP Deny overrides any IAM Allow — it is always effective regardless of what
+   IAM identity policies permit.
+4. The management account of an organization is NOT restricted by SCPs. SCPs apply only
+   to member accounts.
+5. Service-linked roles are exempt from SCP restrictions.
+
+SCP STRATEGY TYPES:
+- Deny-list strategy (default with FullAWSAccess): All actions allowed unless explicitly
+  denied by a custom SCP. FullAWSAccess is a managed SCP allowing all actions. Custom SCPs
+  add specific denies on top.
+- Allow-list strategy: FullAWSAccess is removed; only explicitly allowed actions are
+  permitted. Less common, more restrictive, more complex to manage.
+
+SCPS AND PRIVILEGE ESCALATION PATHS:
+In the context of IAM privilege escalation analysis:
+- An SCP denying iam:AttachRolePolicy, iam:PutRolePolicy, or iam:CreatePolicyVersion
+  organization-wide eliminates entire classes of escalation paths, even if the IAM
+  identity policy permits them.
+- SCPs denying sts:AssumeRole for certain conditions can block lateral movement paths.
+- SCP protection is a defense-in-depth control: it does not replace IAM least privilege
+  but provides an additional boundary.
+- Removing an SCP would immediately reactivate all previously blocked escalation paths.
+
+FRAMEWORK INTEGRATION:
+Phase 2 of this framework applies SCP-aware filtering via scp_filter.py after BFS
+path discovery. Paths blocked by SCPs are annotated as scp_blocked=True (latent risk)
+rather than removed, reflecting that the IAM misconfiguration persists even when an SCP
+provides temporary mitigation. This distinction is critical for risk management.
+
+IMPORTANT LIMITATIONS:
+- SCPs do not restrict the AWS account root user.
+- SCPs cannot be applied to the management account.
+- Resource-based policies are not controlled by SCPs.
+- Permissions boundaries are separate from SCPs (both can restrict actions independently).

@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_customer_attached_policy_no_administrative_privileges",
+  "CheckTitle": "Ensure IAM policies that allow full administrative privileges are not attached (customer-managed policies)",
+  "Severity": "high",
+  "Description": "Customer-managed IAM policies that grant full administrative privileges (Action: '*' and Resource: '*') must not be attached to any user, group, or role. Customer-managed policies with admin privileges often bypass standard security reviews applied to AWS managed policies.",
+  "Risk": "Customer-managed admin policies can be crafted to grant unrestricted access while appearing less risky than the AdministratorAccess AWS managed policy. Attached admin policies grant the same full-account control as AdministratorAccess.",
+  "Remediation": "Audit all customer-managed policies for statements with Action: '*' or Action: 'iam:*' combined with Resource: '*'. Replace with scoped policies. Detach over-privileged policies from all principals.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.16 (Level 1); AWS Security Hub FSBP IAM.16; full admin privilege attachment violates least privilege and enables direct account takeover",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.16 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-3",
+  "ReferenceControlId": "IAM.16",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-16"
+}

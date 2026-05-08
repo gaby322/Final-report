@@ -1,0 +1,26 @@
+# actions: TagUser,TagRole,UntagUser,UntagRole
+
+AWS IAM Attribute-Based Access Control (ABAC) and Tag Security
+Type: Direct summary from AWS official documentation with framework-specific security note
+Source: AWS IAM official documentation
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_iam-tags.html
+
+Overview:
+AWS IAM supports attribute-based access control (ABAC) by using tags attached to principals and resources during authorization. In IAM policies, tag-aware access control commonly uses condition keys such as aws:PrincipalTag, aws:ResourceTag, aws:RequestTag, and aws:TagKeys.
+
+Relevant tag condition logic:
+- aws:PrincipalTag/key compares the request against tags attached to the calling IAM user or role
+- aws:ResourceTag/key compares the request against tags attached to the target resource
+- aws:RequestTag/key controls which tag key-value pairs may be included in a tagging request
+- aws:TagKeys controls which tag keys may appear in a request
+
+IAM-specific tag control:
+AWS documents that IAM users and roles themselves can be controlled through tag-based conditions. This allows policies to restrict what tagged IAM principals can do and what tag values may be added, changed, or removed on IAM users and roles.
+
+Security note for ABAC environments:
+When ABAC is used as an authorization model, the security of the model depends on the integrity of the tags involved in access decisions. If a principal can freely modify authorization-relevant tags on itself or on target resources, the ABAC design may become unsafe. In practice, tagging permissions and tag condition controls should be treated as part of the authorization boundary.
+
+Relationship to this framework:
+Phase 1 includes ABAC-oriented checks for risky tag-dependent access configurations. In this framework, IAM tag-modification events such as TagUser, TagRole, UntagUser, and UntagRole are treated as implementation-level signals that may be relevant to privilege escalation or access manipulation in ABAC-governed environments. They should not be presented as direct MITRE procedure examples unless separately supported by MITRE documentation.

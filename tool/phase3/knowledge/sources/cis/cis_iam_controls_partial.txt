@@ -1,0 +1,37 @@
+# actions: CreateAccessKey,DeleteAccessKey,CreateLoginProfile,DeactivateMFADevice,GenerateCredentialReport
+
+CIS AWS Foundations Benchmark — IAM Controls (Public Partial Reference)
+Type: Public-summary note based on official CIS and AWS Security Hub public pages
+Source: CIS official benchmark page
+URL: https://www.cisecurity.org/benchmark/amazon_web_services
+Source: AWS Security Hub — CIS AWS Foundations Benchmark
+URL: https://docs.aws.amazon.com/securityhub/latest/userguide/cis-aws-foundations-benchmark.html
+Source: AWS Security Hub control reference
+URL: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-controls-reference.html
+
+Important scope note:
+This file is intentionally limited to publicly accessible material.
+- CIS states that the AWS Benchmark PDF is freely available for non-commercial use from the official CIS site.
+- This file does not reproduce benchmark text from the PDF.
+- Instead, it records public benchmark availability and publicly visible AWS Security Hub CIS benchmark control coverage.
+- Exact benchmark-version citations should be verified manually against the downloaded CIS PDF or the AWS Security Hub control reference before use in a research paper.
+
+Publicly visible IAM-related CIS benchmark coverage in AWS Security Hub:
+AWS Security Hub publicly lists IAM-focused controls within the CIS AWS Foundations Benchmark standard, including controls such as:
+- IAM policies should not allow full "*" administrative privileges
+- IAM users should not have IAM policies attached
+- IAM users' access keys should be rotated every 90 days or less
+- IAM root user access key should not exist
+- MFA should be enabled for IAM users that have a console password
+- Hardware MFA should be enabled for the root user
+- MFA should be enabled for the root user
+- IAM password policy should require minimum password length of 14 or greater
+- IAM password policy should prevent password reuse
+
+How to use this file safely:
+- Use it as a public benchmark-alignment note, not as a substitute for the full CIS benchmark text
+- Do not quote proprietary or undisplayed CIS wording from this file
+- Before citing a specific CIS benchmark version or control number in a paper, verify it directly against the downloaded CIS benchmark PDF or the AWS Security Hub control reference page
+
+Relationship to this framework:
+Phase 1 contains IAM checks whose security intent overlaps with publicly visible AWS Security Hub CIS benchmark control topics. Any paper claim about CIS alignment should be phrased carefully and verified against the exact benchmark version used.

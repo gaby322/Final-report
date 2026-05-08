@@ -1,0 +1,24 @@
+# actions: DeactivateMFADevice,DeleteVirtualMFADevice
+
+Technique: T1556.006 — Modify Authentication Process: Multi-Factor Authentication
+Tactics: Credential Access, Defense Evasion, Persistence
+Platforms: IaaS, Identity Provider, Linux, Office Suite, SaaS, Windows, macOS
+
+Source: MITRE ATT&CK
+URL: https://attack.mitre.org/techniques/T1556/006/
+
+Description:
+Adversaries may disable or modify multi-factor authentication (MFA) mechanisms to enable persistent access to compromised accounts. MITRE notes that adversaries may disable MFA defenses, register adversary-controlled MFA methods, or weaken MFA enforcement to allow successful authentication without the expected second factor.
+
+AWS-relevant interpretation for this framework:
+- DeactivateMFADevice may indicate disabling MFA protection on an IAM user
+- DeleteVirtualMFADevice may indicate removal of a virtual MFA device associated with account protection
+
+Detection:
+MITRE detection guidance focuses on suspicious MFA method changes, removal of MFA enforcement, registration of new MFA factors by anomalous users, or successful authentications that occur without expected MFA prompts.
+
+Mitigation:
+MITRE mitigation guidance includes reviewing MFA actions alongside authentication logs, ensuring accounts have MFA enabled, enforcing secure enrollment and deactivation procedures, and preferring fail-closed behavior where possible.
+
+Framework note:
+The # actions metadata line is framework retrieval metadata. Additional federation-related changes may be operationally relevant to this project, but they should not be presented as explicit MITRE AWS procedure examples for T1556.006 unless directly supported by the MITRE technique page.

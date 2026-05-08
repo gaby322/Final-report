@@ -1,0 +1,35 @@
+# actions: AssumeRole,AttachRolePolicy,PutRolePolicy,CreatePolicyVersion
+
+AWS IAM Policy Evaluation Logic
+Source: AWS IAM User Guide — Policy evaluation logic
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-basics.html
+URL: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html
+
+Overview:
+When a principal makes a request to AWS, AWS authenticates the principal if required, builds the request context, determines which policy types apply, and then evaluates those applicable policies to decide whether the request is allowed or denied.
+
+Core evaluation principles:
+- AWS uses explicit deny logic. If an applicable policy explicitly denies the request, that deny overrides any allow.
+- If no applicable policy allows the request, the request is denied by default.
+- In same-account scenarios, identity-based and resource-based policies can combine, and the resulting permissions depend on the applicable policy types.
+- Permissions boundaries restrict identity-based permissions by intersection.
+- AWS Organizations SCPs and RCPs can further restrict effective permissions.
+
+Same-account evaluation:
+AWS provides separate evaluation flow charts for IAM users and IAM roles within a single account. These flows should be treated as the authoritative reference for detailed same-account policy reasoning.
+
+Cross-account evaluation:
+AWS evaluates cross-account access using a separate logic model. In general, the trusted side must allow access through a resource-based policy (or role trust policy for role assumption), and the calling side must also have an identity-based permission that authorizes the request.
+
+Trust policy note:
+A role trust policy is a resource-based policy attached to an IAM role. It controls who can call AssumeRole or related STS operations against that role, while the role’s permissions policy controls what the resulting role session can do after assumption.
+
+Relationship to this framework:
+This framework uses AWS policy evaluation logic as background knowledge for:
+- Phase 1 interpretation of IAM misconfigurations
+- Phase 2 construction of permission-transition edges
+- Phase 3 explanation and grounding of correlated identity events
+
+Framework note:
+Detailed same-account and cross-account reasoning should be retrieved from their dedicated AWS KB files rather than relying only on this overview.

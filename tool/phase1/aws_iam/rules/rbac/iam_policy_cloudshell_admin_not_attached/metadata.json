@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_policy_cloudshell_admin_not_attached",
+  "CheckTitle": "Ensure access to AWSCloudShellFullAccess is restricted",
+  "Severity": "medium",
+  "Description": "The AWSCloudShellFullAccess managed policy must not be attached to IAM users, groups, or roles beyond those who genuinely require it. AWS CloudShell provides a browser-based CLI with persistent storage and network access from within the AWS console, making it a powerful lateral movement vector if over-granted.",
+  "Risk": "AWSCloudShellFullAccess grants full CloudShell access including file uploads, downloads, and network connectivity from within the AWS network perimeter. Overly broad CloudShell access enables data exfiltration, credential access via instance metadata, and lateral movement within the AWS environment.",
+  "Remediation": "Remove AWSCloudShellFullAccess from principals that do not require shell access. Grant CloudShell access only to operations personnel with documented business need. Use SCPs to restrict CloudShell availability in production accounts.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Control 1.22 (Level 1); AWS Security Hub FSBP IAM.21; CloudShell enables exfiltration and lateral movement from within the AWS network perimeter",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.22 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, CM-7",
+  "ReferenceControlId": "IAM.21",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-21"
+}

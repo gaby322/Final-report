@@ -1,0 +1,16 @@
+{
+  "CheckID": "iam_tag_write_without_tagkeys_restriction",
+  "CheckTitle": "Ensure IAM tag write actions are restricted by aws:TagKeys conditions",
+  "Severity": "high",
+  "Description": "Policies granting IAM tag write actions (iam:TagUser, iam:TagRole, iam:TagPolicy, iam:TagInstanceProfile, iam:TagServerCertificate, iam:TagMFADevice, iam:TagOpenIDConnectProvider, iam:TagSAMLProvider, and their Untag counterparts) on Resource: * without aws:TagKeys conditions allow unrestricted tag manipulation. In ABAC environments, tags are the security attributes that govern resource access; unrestricted tag writes allow a principal to add or remove tags to gain or deny access to resources they should not be able to reach.",
+  "Risk": "Unrestricted IAM tag write access enables ABAC privilege escalation via attribute manipulation: (1) Adding a tag that satisfies a resource access condition (e.g., Project=Admin), (2) Removing a tag that blocks access (e.g., Environment=Restricted), (3) Modifying another IAM entity's classification tags to impersonate a higher-privilege identity. The aws:TagKeys condition restricts which tag keys can be set, preventing these manipulation vectors.",
+  "Remediation": "Add aws:TagKeys conditions to all policies granting IAM tag write actions to restrict which tag keys the principal can create, modify, or delete. Maintain a list of protected ABAC attribute tag keys that must never be modifiable by non-admin principals.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Policy",
+  "Categories": ["security", "compliance", "abac", "privilege-escalation"],
+  "SeverityBasis": "AWS IAM documentation — Controlling access using tag keys (aws:TagKeys); NIST SP 800-162 §2.4.2 (Attribute Management in Enterprise ABAC); NIST SP 800-53 Rev. 5 AC-3. Tag manipulation is a documented ABAC privilege escalation vector.",
+  "AuthoritativeSource": "AWS IAM documentation — Controlling access to AWS using tag condition keys; NIST SP 800-162; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — aws:TagKeys enforcement is not individually enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-3",
+  "ReferenceUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html"
+}

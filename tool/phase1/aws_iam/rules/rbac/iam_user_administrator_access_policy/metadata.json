@@ -1,0 +1,18 @@
+{
+  "CheckID": "iam_user_administrator_access_policy",
+  "CheckTitle": "Ensure IAM policies that allow full administrative privileges are not attached to IAM users",
+  "Severity": "high",
+  "Description": "IAM users must not have policies granting full administrative privileges attached directly to them. Administrative access should be granted via roles with time-limited assumption, not via permanent user policies. CIS 1.16 prohibits full admin policy attachment; CIS 1.15 further restricts policies from being attached directly to users.",
+  "Risk": "Users with full admin access can perform any action on any resource using permanent, long-lived credentials. This combines unrestricted privilege with a long-term credential, maximizing the impact of a credential compromise.",
+  "Remediation": "Remove admin policies from IAM users. If administrative access is required, create an IAM role with appropriate trust policy and have users assume the role with MFA. Use permission boundaries to enforce limits.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "CIS AWS Foundations Benchmark v3.0.0 Controls 1.15 (Level 1) and 1.16 (Level 1); AWS Security Hub FSBP IAM.1; High (not Critical) per CIS Level 1 classification model — direct admin policy on a user requires a long-lived credential compromise but does not require additional steps post-compromise",
+  "AuthoritativeSource": "CIS Amazon Web Services Foundations Benchmark v3.0.0; AWS Security Hub FSBP",
+  "CISControl": "CIS AWS 3.0.0 - 1.15 (Level 1), 1.16 (Level 1)",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-6, AC-2",
+  "ReferenceControlId": "IAM.1",
+  "ReferenceSource": "AWS Security Hub FSBP",
+  "ReferenceUrl": "https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-1"
+}

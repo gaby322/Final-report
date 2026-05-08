@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_securityaudit_role_created",
+  "CheckTitle": "Ensure a dedicated security audit IAM role exists",
+  "Severity": "low",
+  "Description": "A dedicated IAM role with the SecurityAudit managed policy (or equivalent read-only access) should exist to enable security teams to perform audits of AWS resources without requiring elevated credentials. Absence of such a role forces security reviewers to use higher-privilege accounts.",
+  "Risk": "Without a dedicated security audit role, security reviews require sharing credentials with broader permissions than necessary, violating least-privilege principles. This increases the risk of accidental or malicious modification during security reviews.",
+  "Remediation": "Create an IAM role named SecurityAudit (or similar) and attach the AWS managed SecurityAudit policy (arn:aws:iam::aws:policy/SecurityAudit). Configure a trust policy allowing assumption by the security team's identity provider or IAM principals.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::Role",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS IAM documentation — Security best practices in IAM (grant least privilege for security operations roles); NIST SP 800-53 Rev. 5 AU-6 (Audit Record Review, Analysis, and Reporting). Not a numbered control in CIS AWS 3.0.0; low severity reflects an operational gap rather than direct exploitation risk.",
+  "AuthoritativeSource": "AWS IAM documentation — Security best practices in IAM; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — security audit role creation is not enumerated in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AU-6, AC-6"
+}

@@ -1,0 +1,191 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phase 3 Correlated Alerts Output",
+  "description": "Schema for phase3_alerts.json produced by the Phase 3 runner. Every field is mandatory unless marked optional.",
+  "type": "object",
+  "required": ["phase3_stats", "alerts"],
+  "properties": {
+    "phase3_stats": {
+      "type": "object",
+      "required": [
+        "total_alerts", "by_alert_type", "by_severity",
+        "by_event_sensitivity", "by_tier", "grounding_valid_count"
+      ],
+      "properties": {
+        "total_alerts": {"type": "integer", "minimum": 0},
+        "by_alert_type": {"type": "object"},
+        "by_severity": {"type": "object"},
+        "by_event_sensitivity": {"type": "object"},
+        "by_tier": {"type": "object"},
+        "by_evidence_completeness": {"type": "object"},
+        "grounding_valid_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "alert_id",
+          "alert_type",
+          "correlation_tier",
+          "correlation_reason",
+          "source_phase1_check_ids",
+          "source_phase2_path_ids",
+          "source_cloudtrail_event_ids",
+          "source_cloudtrail_event_names",
+          "principal_arns",
+          "affected_roles",
+          "affected_policies",
+          "account_id",
+          "aws_region",
+          "p1_severity_label",
+          "p2_risk_label",
+          "event_sensitivity",
+          "overall_severity",
+          "evidence_completeness",
+          "p1_match_confidence",
+          "mitre",
+          "llm_explanation",
+          "llm_priority_justification",
+          "llm_false_positive_assessment",
+          "llm_remediation_steps",
+          "llm_backend_used",
+          "rag_sources_used",
+          "rag_chunks_count",
+          "grounding_valid",
+          "ungrounded_fields",
+          "grounding_details",
+          "evidence_summary"
+        ],
+        "properties": {
+          "alert_id": {"type": "string", "minLength": 1},
+          "alert_type": {
+            "type": "string",
+            "enum": ["ACTIVE_EXPLOITATION", "LATENT_RISK", "SUSPICIOUS_ACTIVITY", "INFORMATIONAL"]
+          },
+          "correlation_tier": {
+            "type": "string",
+            "enum": [
+              "STRONGLY_CORRELATED",
+              "PARTIALLY_CORRELATED",
+              "DYNAMIC_STANDALONE",
+              "STATIC_STANDALONE"
+            ]
+          },
+          "correlation_reason": {"type": "string"},
+          "source_phase1_check_ids": {"type": "array", "items": {"type": "string"}},
+          "source_phase2_path_ids": {"type": "array", "items": {"type": "string"}},
+          "source_cloudtrail_event_ids": {"type": "array", "items": {"type": "string"}},
+          "source_cloudtrail_event_names": {"type": "array", "items": {"type": "string"}},
+          "principal_arns": {"type": "array", "items": {"type": "string"}},
+          "affected_roles": {"type": "array", "items": {"type": "string"}},
+          "affected_policies": {"type": "array", "items": {"type": "string"}},
+          "account_id": {"type": "string"},
+          "aws_region": {"type": "string"},
+          "p1_severity_label": {"type": "string"},
+          "p2_risk_label": {"type": "string"},
+          "event_sensitivity": {
+            "type": "string",
+            "enum": ["", "HIGH", "MEDIUM"]
+          },
+          "overall_severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFORMATIONAL", "SEE_EVENT_SENSITIVITY"]
+          },
+          "evidence_completeness": {
+            "type": "string",
+            "enum": ["FULL", "PARTIAL", "LIMITED"]
+          },
+          "p1_match_confidence": {
+            "type": "string",
+            "enum": [
+              "ARN_EXACT",
+              "TARGET_ARN_EXACT",
+              "TYPE_LEAF",
+              "TARGET_TYPE_LEAF",
+              "ISSUER_TYPE_LEAF",
+              "NAME_ONLY",
+              "NONE"
+            ]
+          },
+          "mitre": {
+            "type": "object",
+            "required": [
+              "tactic",
+              "tactic_id",
+              "technique",
+              "technique_id",
+              "mapping_basis",
+              "llm_tactic_confirmed",
+              "llm_technique_inferred"
+            ],
+            "properties": {
+              "tactic": {"type": "string"},
+              "tactic_id": {"type": "string"},
+              "technique": {"type": "string"},
+              "technique_id": {"type": "string"},
+              "sub_technique": {"type": ["string", "null"]},
+              "sub_technique_id": {"type": ["string", "null"]},
+              "mapping_basis": {"type": "string", "enum": ["HIGH", "MEDIUM", "NONE"]},
+              "llm_tactic_confirmed": {"type": "string"},
+              "llm_technique_inferred": {"type": "string"}
+            }
+          },
+          "llm_explanation": {"type": "string"},
+          "llm_priority_justification": {"type": "string"},
+          "llm_false_positive_assessment": {"type": "string"},
+          "llm_remediation_steps": {"type": "string"},
+          "llm_backend_used": {"type": "string"},
+          "rag_sources_used": {"type": "array", "items": {"type": "string"}},
+          "rag_chunks_count": {"type": "integer", "minimum": 0},
+          "grounding_valid": {"type": "boolean"},
+          "ungrounded_fields": {"type": "array", "items": {"type": "string"}},
+          "grounding_details": {"type": "object"},
+          "evidence_summary": {"type": "string"},
+          "evidence_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["check_id", "severity"],
+              "properties": {
+                "check_id": {"type": "string"},
+                "resource_type": {"type": "string"},
+                "resource_id": {"type": "string"},
+                "principal_arn": {"type": "string"},
+                "severity": {"type": "string"},
+                "status_extended": {"type": "string"},
+                "description": {"type": "string"},
+                "remediation": {"type": "string"},
+                "evidence_summary": {"type": "string"}
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "description": "DYNAMIC_STANDALONE alerts must carry the SEE_EVENT_SENSITIVITY sentinel; other tiers must not.",
+            "if": {"properties": {"correlation_tier": {"const": "DYNAMIC_STANDALONE"}}},
+            "then": {"properties": {"overall_severity": {"const": "SEE_EVENT_SENSITIVITY"}}}
+          },
+          {
+            "description": "DYNAMIC_STANDALONE alerts must carry a non-empty event_sensitivity.",
+            "if": {"properties": {"correlation_tier": {"const": "DYNAMIC_STANDALONE"}}},
+            "then": {"properties": {"event_sensitivity": {"enum": ["HIGH", "MEDIUM"]}}}
+          },
+          {
+            "description": "STRONGLY_CORRELATED tier requires a P1 match stronger than NAME_ONLY.",
+            "if": {"properties": {"correlation_tier": {"const": "STRONGLY_CORRELATED"}}},
+            "then": {"properties": {"p1_match_confidence": {"enum": [
+              "ARN_EXACT",
+              "TARGET_ARN_EXACT",
+              "TYPE_LEAF",
+              "TARGET_TYPE_LEAF",
+              "ISSUER_TYPE_LEAF"
+            ]}}}
+          }
+        ]
+      }
+    }
+  }
+}

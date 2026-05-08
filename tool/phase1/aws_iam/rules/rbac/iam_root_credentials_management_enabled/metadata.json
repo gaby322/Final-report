@@ -1,0 +1,15 @@
+{
+  "CheckID": "iam_root_credentials_management_enabled",
+  "CheckTitle": "Ensure AWS Organizations root credentials management is enabled",
+  "Severity": "medium",
+  "Description": "AWS Organizations root credentials management allows the management account to centrally control and restrict root user actions in member accounts, reducing the risk of root credential misuse across the organization.",
+  "Risk": "Without centralized root credentials management, individual member account root users retain unrestricted access, making it harder to enforce consistent root access controls at organizational scale and increasing the blast radius of a member account compromise.",
+  "Remediation": "Enable RootCredentialsManagement in AWS Organizations via the management account using the EnablePolicyType API or the AWS Management Console.",
+  "ServiceName": "iam",
+  "ResourceType": "AWS::IAM::User",
+  "Categories": ["security", "compliance"],
+  "SeverityBasis": "AWS Organizations security best practice; NIST SP 800-53 Rev. 5 AC-2 (Account Management). Not a numbered CIS AWS 3.0.0 control; severity reflects organizational scope and dependency on AWS Organizations enrollment.",
+  "AuthoritativeSource": "AWS Organizations documentation — Root Credentials Management; NIST SP 800-53 Rev. 5",
+  "CISControl": "N/A — AWS Organizations feature, not enumerated as a numbered control in CIS AWS 3.0.0",
+  "NISTControl": "NIST SP 800-53 Rev. 5 - AC-2, IA-5"
+}
